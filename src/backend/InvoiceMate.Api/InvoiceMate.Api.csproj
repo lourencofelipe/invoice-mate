@@ -13,9 +13,12 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Services\" />
     <Folder Include="Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceMate.Application\InvoiceMate.Application.csproj" />
   </ItemGroup>
 
 </Project>
