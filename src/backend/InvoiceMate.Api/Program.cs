@@ -1,28 +1,37 @@
-using InvoiceMate.Api.Extensions;
-using InvoiceMate.Application.Common.Mapping;
-using System.Text.Json.Serialization;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+builder.Services.AddAutoMapper();
+builder.Services.AddValidators();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    })
+    .ConfigureApiBehaviorOptions(options => 
+    {
+        options.SuppressModelStateInvalidFilter = true;
     });
 
+
+// Infra stubs (replace later with real implementations)
+//builder.Services.AddSingleton<IEmailSender, EmailSenderConsole>();  // Infrastructure.Services.EmailSenderConsole
+// If using limits now:
+// builder.Services.AddSingleton<IUsageLimiter, InMemoryUsageLimiter>();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseMiddleware<ProblemDetailsMiddleware>();
+app.UseExceptionHandler("/error"); // add an /error endpoint or your middleware
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {

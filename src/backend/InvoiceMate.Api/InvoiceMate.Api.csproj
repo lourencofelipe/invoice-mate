@@ -7,18 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Services\" />
     <Folder Include="Pages\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InvoiceMate.Application\InvoiceMate.Application.csproj" />
+    <ProjectReference Include="..\InvoiceMate.Infrastructure\InvoiceMate.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
