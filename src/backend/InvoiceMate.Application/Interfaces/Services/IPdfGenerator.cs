@@ -2,8 +2,6 @@
 
 public interface IPdfGenerator
 {
-    Task<byte[]> GenerateFromTemplateAsync(
-        string templateKey,
-        object model,
-        CancellationToken ct = default);
+    Task<byte[]> GenerateAsync(Invoice invoice, CancellationToken ct = default);
+
 }

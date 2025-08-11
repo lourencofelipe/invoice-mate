@@ -1,4 +1,7 @@
-﻿namespace InvoiceMate.Api.Extensions;
+﻿using InvoiceMate.Application.Interfaces.Services;
+using InvoiceMate.Infrastructure.Pdf;
+
+namespace InvoiceMate.Api.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
@@ -9,6 +12,8 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IPdfGenerator, InvoicePdfGenerator>();
+
         return services;
     }
 

@@ -1,0 +1,129 @@
+﻿@model InvoiceMate.Domain.Entities.Invoice
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice @Model.InvoiceNumber</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice: @Model.InvoiceNumber</h1>
+    <p><strong>Invoice Date:</strong> @Model.InvoiceDate.ToString("dd-MM-yyyy")</p>
+    <p><strong>Due Date:</strong> @Model.DueDate.ToString("dd-MM-yyyy")</p>
+
+    <h2>From:</h2>
+    <p>
+        @Model.SenderName<br />
+        @Model.SenderEmail<br />
+        @if (!string.IsNullOrEmpty(Model.SenderPhoneNumber))
+        {
+            <text>Phone: @Model.SenderPhoneNumber<br /></text>
+        }
+        @if (!string.IsNullOrEmpty(Model.SenderAccNumber))
+        {
+            <text>Account: @Model.SenderAccNumber<br /></text>
+        }
+        @if (Model.SenderAddress != null)
+        {
+            @($"{Model.SenderAddress.Line1}, {Model.SenderAddress.City}, {Model.SenderAddress.Region}, {Model.SenderAddress.Postcode}, {Model.SenderAddress.Country}")
+        }
+    </p>
+
+    <h2>Bill To:</h2>
+    <p>
+        @Model.RecipientName<br />
+        @Model.RecipientEmail<br />
+        @if (!string.IsNullOrEmpty(Model.RecipientPhoneNumber))
+        {
+            <text>Phone: @Model.RecipientPhoneNumber<br /></text>
+        }
+        @if (Model.RecipientAddress != null)
+        {
+            @($"{Model.RecipientAddress.Line1}, {Model.RecipientAddress.City}, {Model.RecipientAddress.Region}, {Model.RecipientAddress.Postcode}, {Model.RecipientAddress.Country}")
+        }
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                @if (Model.Type == "time-based")
+                {
+                    <th class="right">Hours</th>
+                    <th class="right">Rate/Hour (@Model.Currency)</th>
+                }
+                else
+                {
+                    <th class="right">Quantity</th>
+                    <th class="right">Unit Price (@Model.Currency)</th>
+                }
+                <th class="right">Total (@Model.Currency)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                    @if (Model.Type == "time-based")
+                    {
+                        <td class="right">@item.Hours</td>
+                        <td class="right">@String.Format("{0:0.00}", item.HourlyRate)</td>
+                    }
+                    else
+                    {
+                        <td class="right">@item.Quantity</td>
+                        <td class="right">@String.Format("{0:0.00}", item.UnitPrice)</td>
+                    }
+                    <td class="right">@String.Format("{0:0.00}", item.Total)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="right"><strong>Subtotal:</strong></td>
+                <td class="right">@String.Format("{0:0.00}", Model.Subtotal)</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="right"><strong>Tax (GST):</strong></td>
+                <td class="right">@String.Format("{0:0.00}", Model.Tax)</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="right"><strong>Total:</strong></td>
+                <td class="right">@String.Format("{0:0.00}", Model.Total)</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    @if (!string.IsNullOrEmpty(Model.Notes))
+    {
+        <h3>Notes</h3>
+        <p>@Model.Notes</p>
+    }
+</body>
+</html>

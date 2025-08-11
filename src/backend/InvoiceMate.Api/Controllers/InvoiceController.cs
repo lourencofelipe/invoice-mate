@@ -5,50 +5,29 @@
 public class InvoiceController : ControllerBase
 {
     private readonly IValidator<CreateInvoiceRequest> _validator;
+    private readonly IPdfGenerator _pdfGenerator;
+    private readonly IMapper _mapper;
+    private readonly CreateInvoiceUseCase _createInvoiceUseCase;
 
-    public InvoiceController(IValidator<CreateInvoiceRequest> validator)
-        => _validator = validator;
-
-    /// <summary>Cria um invoice (somente cálculo/eco no MVP de teste).</summary>
-    [HttpPost]
-    [ProducesResponseType(typeof(CreateInvoiceResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CreateInvoiceRequest req, CancellationToken ct)
+    public InvoiceController(
+        IValidator<CreateInvoiceRequest> validator,
+        IPdfGenerator pdfGenerator,
+        IMapper mapper,
+        CreateInvoiceUseCase createInvoiceUseCase)
     {
-        var v = await _validator.ValidateAsync(req, ct);
-        if (!v.IsValid)
-        {
-            var ms = new ModelStateDictionary();
-            foreach (var e in v.Errors)
-                ms.AddModelError(e.PropertyName ?? string.Empty, e.ErrorMessage);
+        _validator = validator;
+        _pdfGenerator = pdfGenerator;
+        _mapper = mapper;
+        _createInvoiceUseCase = createInvoiceUseCase;
+    }
 
-            return ValidationProblem(ms);
-        }
 
-        // Cálculo simples aqui mesmo para teste (sem UseCase/infra)
-        decimal subtotal = req.Type == "time-based"
-            ? req.Items.Sum(i => (i.Hours ?? 0) * (i.HourlyRate ?? 0))
-            : req.Items.Sum(i => (i.Quantity ?? 0) * (i.UnitPrice ?? 0));
+    [HttpPost("generate-pdf")]
+    public async Task<IActionResult> GenerateInvoicePdf([FromBody] CreateInvoiceRequest request, CancellationToken ct)
+    {
+        var response = await _createInvoiceUseCase.ExecuteAsync(request, ct);
 
-        var rate = req.ApplyGst ? (req.GstRate ?? 0) : 0;
-        var tax = Math.Round(subtotal * rate, 2, MidpointRounding.AwayFromZero);
-        var total = subtotal + tax;
-
-        var resp = new CreateInvoiceResponse(
-            InvoiceId: Guid.NewGuid(),
-            InvoiceNumber: req.InvoiceNumber,
-            Type: req.Type,
-            Currency: req.Currency,
-            InvoiceDate: req.InvoiceDate,
-            DueDate: req.DueDate,
-            Subtotal: subtotal,
-            Tax: tax,
-            Total: total,
-            Status: "Generated",
-            PdfPreviewUrl: null
-        );
-
-        return CreatedAtAction(nameof(GetPreview), new { id = resp.InvoiceId }, resp);
+        return File(response.PdfBytes, "application/pdf", $"Invoice_{response.InvoiceNumber}.pdf");
     }
 
     /// <summary>Placeholder para preview do PDF.</summary>

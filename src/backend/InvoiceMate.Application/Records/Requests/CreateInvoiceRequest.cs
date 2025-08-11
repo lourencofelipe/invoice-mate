@@ -4,9 +4,12 @@ public sealed record CreateInvoiceRequest(
     string Type,                   // "time-based" | "product-based"
     string SenderName,
     string SenderEmail,
+    string? SenderPhoneNumber, // optional
     AddressRequest? SenderAddress,
+    string? SenderAccNumber,     // optional, e.g., bank account number
     string RecipientName,
     string RecipientEmail,
+    string? RecipientPhoneNumber, // optional
     AddressRequest? RecipientAddress,
     string Currency,               // ISO-4217 (e.g., "NZD")
     DateTime InvoiceDate,

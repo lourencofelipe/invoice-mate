@@ -10,10 +10,14 @@ public class Invoice
 
     public string SenderName { get; private set; }
     public string SenderEmail { get; private set; }
+    public string? SenderPhoneNumber { get; private set; }
     public Address? SenderAddress { get; private set; }
+    public string? SenderAccNumber { get; private set; }
+
 
     public string RecipientName { get; private set; }
     public string RecipientEmail { get; private set; }
+    public string? RecipientPhoneNumber { get; private set; }
     public Address? RecipientAddress { get; private set; }
 
     public string Currency { get; private set; }
@@ -35,8 +39,11 @@ public class Invoice
         string type,
         string senderName,
         string senderEmail,
+        string? senderPhoneNumber,
         Address? senderAddress,
+        string? senderAccNumber,
         string recipientName,
+        string? recipientPhoneNumber,
         string recipientEmail,
         Address? recipientAddress,
         string currency,
@@ -50,9 +57,12 @@ public class Invoice
         Type = type;
         SenderName = senderName;
         SenderEmail = senderEmail;
+        SenderPhoneNumber = senderPhoneNumber;
         SenderAddress = senderAddress;
+        SenderAccNumber = senderAccNumber;
         RecipientName = recipientName;
         RecipientEmail = recipientEmail;
+        RecipientPhoneNumber = recipientPhoneNumber;
         RecipientAddress = recipientAddress;
         Currency = currency;
         InvoiceDate = invoiceDate;
@@ -66,9 +76,12 @@ public class Invoice
         string type,
         string senderName,
         string senderEmail,
+        string? senderPhoneNumber,
         Address? senderAddress,
+        string? senderAccNumber,
         string recipientName,
         string recipientEmail,
+        string? recipientPhoneNumber,
         Address? recipientAddress,
         string currency,
         DateTime invoiceDate,
@@ -80,8 +93,8 @@ public class Invoice
     {
         var invoice = new Invoice(
             Guid.NewGuid(), invoiceNumber, type,
-            senderName, senderEmail, senderAddress,
-            recipientName, recipientEmail, recipientAddress,
+            senderName, senderEmail, senderPhoneNumber, senderAddress, senderAccNumber,
+            recipientName, recipientEmail, recipientPhoneNumber, recipientAddress,
             currency, invoiceDate, dueDate,
             items, notes);
 

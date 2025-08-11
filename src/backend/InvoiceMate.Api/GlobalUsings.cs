@@ -1,8 +1,7 @@
-﻿global using InvoiceMate.Application.Records.Responses;
+﻿global using InvoiceMate.Application.Interfaces.Services;
 global using Microsoft.Extensions.DependencyInjection;
 global using InvoiceMate.Application.Records.Requests;
 global using InvoiceMate.Application.Common.Mapping;
-global using Microsoft.AspNetCore.Mvc.ModelBinding;
 global using InvoiceMate.Application.Validators;
 global using InvoiceMate.Application.Services;
 global using System.Text.Json.Serialization;
@@ -12,3 +11,4 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using FluentValidation;
 global using System.Text.Json;
+global using AutoMapper;

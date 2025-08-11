@@ -11,5 +11,6 @@ public sealed record CreateInvoiceResponse(
     decimal Tax,
     decimal Total,
     string Status,               // e.g., "Generated"
-    string? PdfPreviewUrl        // null on MVP
+    string? PdfPreviewUrl,        // null on MVP
+    byte[] PdfBytes
 );
