@@ -5,6 +5,7 @@ global using InvoiceMate.Application.Common.Mapping;
 global using InvoiceMate.Application.Validators;
 global using InvoiceMate.Application.Services;
 global using System.Text.Json.Serialization;
+global using InvoiceMate.Infrastructure.Pdf;
 global using InvoiceMate.Api.Infra.Errors;
 global using InvoiceMate.Api.Extensions;
 global using Microsoft.AspNetCore.Http;

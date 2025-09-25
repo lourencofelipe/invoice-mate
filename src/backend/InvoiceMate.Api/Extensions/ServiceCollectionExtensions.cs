@@ -1,7 +1,4 @@
-﻿using InvoiceMate.Application.Interfaces.Services;
-using InvoiceMate.Infrastructure.Pdf;
-
-namespace InvoiceMate.Api.Extensions;
+﻿namespace InvoiceMate.Api.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)

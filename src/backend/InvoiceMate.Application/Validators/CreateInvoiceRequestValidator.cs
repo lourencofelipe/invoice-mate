@@ -31,7 +31,7 @@ public sealed class CreateInvoiceRequestValidator : AbstractValidator<CreateInvo
             .NotEmpty()
             .ForEach(f => f.SetValidator(new InvoiceItemRequestValidator()));
 
-        // Regras condicionais por tipo
+        
         When(x => x.Type == "time-based", () =>
         {
             RuleForEach(x => x.Items)

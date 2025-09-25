@@ -4,7 +4,7 @@ public sealed class Address
     public string? Line1 { get; }
     public string? Line2 { get; }
     public string? City { get; }
-    public string? Region { get; }     // State/Province
+    public string? Region { get; } 
     public string? Postcode { get; }
     public string? Country { get; }
 

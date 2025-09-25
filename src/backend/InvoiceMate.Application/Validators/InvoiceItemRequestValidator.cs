@@ -5,7 +5,6 @@ public sealed class InvoiceItemRequestValidator : AbstractValidator<InvoiceItemR
     {
         RuleFor(i => i.Description).NotEmpty().MaximumLength(250);
 
-        // Valores não negativos
         RuleFor(i => i.Hours).GreaterThanOrEqualTo(0)
             .When(i => i.Hours.HasValue);
 

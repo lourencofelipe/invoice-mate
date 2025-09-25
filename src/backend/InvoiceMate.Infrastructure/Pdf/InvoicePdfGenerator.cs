@@ -20,6 +20,7 @@ public class InvoicePdfGenerator : IPdfGenerator
         using var playwright = await Playwright.CreateAsync();
         var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
         var page = await browser.NewPageAsync();
+
         await page.SetContentAsync(htmlContent);
         var pdfBytes = await page.PdfAsync();
 
