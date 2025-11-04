@@ -7,6 +7,17 @@ builder.Services.AddAutoMapper();
 builder.Services.AddValidators();
 
 builder.Services.AddSwaggerGen();
+
+// Add CORS for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -39,6 +50,8 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
