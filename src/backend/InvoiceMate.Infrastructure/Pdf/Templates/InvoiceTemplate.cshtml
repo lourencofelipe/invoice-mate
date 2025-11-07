@@ -72,15 +72,15 @@
         <thead>
             <tr>
                 <th>Description</th>
-                @if (Model.Type == "time-based")
-                {
-                    <th class="right">Hours</th>
-                    <th class="right">Rate/Hour (@Model.Currency)</th>
-                }
-                else
+                @if (Model.Type == "product-based")
                 {
                     <th class="right">Quantity</th>
                     <th class="right">Unit Price (@Model.Currency)</th>
+                }
+                else
+                {
+                    <th class="right">Hours</th>
+                    <th class="right">Rate/Hour (@Model.Currency)</th>
                 }
                 <th class="right">Total (@Model.Currency)</th>
             </tr>
