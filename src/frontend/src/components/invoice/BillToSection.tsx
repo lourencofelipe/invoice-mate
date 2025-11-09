@@ -28,6 +28,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
           id="billToCompany"
           className="input-base"
           type="text"
+          placeholder="Billing Name"
           {...register("billToCompany")}
         />
         {errors.billToCompany && (
@@ -46,6 +47,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToEmail"
             className="input-base"
             type="email"
+            placeholder="email@example.com"
             {...register("billToEmail")}
           />
           {errors.billToEmail && (
@@ -63,6 +65,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToPhone"
             className="input-base"
             type="tel"
+            placeholder="xx xxx xxx xxx"
             {...register("billToPhone")}
           />
         </div>
@@ -76,6 +79,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
           id="billToAddress"
           className="input-base"
           type="text"
+          placeholder="Enter the billing address (e.g., 42 Sample Road)"
           {...register("billToAddress")}
         />
       </div>
@@ -89,6 +93,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToCity"
             className="input-base"
             type="text"
+            placeholder="City"
             {...register("billToCity")}
           />
         </div>
@@ -101,6 +106,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToRegion"
             className="input-base"
             type="text"
+            placeholder="State / Region"
             {...register("billToRegion")}
           />
         </div>
@@ -115,6 +121,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToPostcode"
             className="input-base"
             type="text"
+            placeholder="Postal code"
             {...register("billToPostcode")}
           />
         </div>
@@ -127,6 +134,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             id="billToCountry"
             className="input-base"
             type="text"
+            placeholder="Country"
             {...register("billToCountry")}
           />
         </div>

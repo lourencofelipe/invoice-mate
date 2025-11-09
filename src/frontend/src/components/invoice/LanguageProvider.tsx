@@ -81,7 +81,7 @@ const translations: Record<Language, Record<string, string>> = {
     "receiver.email": "Email",
     "receiver.phone": "Phone",
     "receiver.accNumber": "Account number",
-    "receiver.zip": "Post code",
+    "receiver.zip": "Postal code",
     "receiver.city": "City and state",
     "receiver.address": "Address line 1",
     "receiver.complement": "Address line 2",
@@ -96,7 +96,7 @@ const translations: Record<Language, Record<string, string>> = {
     "billto.addressLine2": "Address line 2",
     "billto.city": "City",
     "billto.region": "State/Region",
-    "billto.postcode": "Postcode",
+    "billto.postcode": "Postal Code",
     "billto.country": "Country",
     
     // Invoice section

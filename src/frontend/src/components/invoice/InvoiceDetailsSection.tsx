@@ -93,7 +93,7 @@ export function InvoiceDetailsSection({
           <Label htmlFor="invoiceNumber" className="mb-2 block">
             {t("invoice.number")}
           </Label>
-          <Input id="invoiceNumber" className="input-base" type="text" {...register("invoiceNumber")} />
+          <Input id="invoiceNumber" className="input-base" type="text" placeholder="e.g. INV-0001" {...register("invoiceNumber")} />
           {errors.invoiceNumber && (
             <p className="mt-2 text-sm text-red-600">{errors.invoiceNumber.message}</p>
           )}
@@ -210,7 +210,7 @@ export function InvoiceDetailsSection({
             <Label htmlFor="description" className="mb-2 block">
               Description
             </Label>
-            <Textarea id="description" rows={3} {...register("description")} className="border-2 border-gray-300 rounded-sm" />
+            <Textarea id="description" rows={3} {...register("description")} placeholder="e.g. Description of services provided" className="border-2 border-gray-300 rounded-sm" />
           </div>
         </div>
       )}
@@ -277,7 +277,7 @@ export function InvoiceDetailsSection({
         <Label htmlFor="notes" className="mb-2 block">
           {t("invoice.notes")}
         </Label>
-        <Textarea id="notes" rows={4} {...register("notes")} className="border-2 border-gray-300 rounded-sm font-semibold" />
+        <Textarea id="notes" rows={4} {...register("notes")} placeholder="e.g. Additional notes or instructions for this invoice" className="border-2 border-gray-300 rounded-sm font-semibold" />
       </div>
     </div>
   );
