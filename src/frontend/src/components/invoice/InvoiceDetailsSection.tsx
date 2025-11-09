@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import {
   UseFormRegister,
   FieldErrors,
@@ -57,6 +57,11 @@ export function InvoiceDetailsSection({
     append({ description: "", quantity: 1, unitPrice: 0 });
   };
 
+  // Update the invoiceDate to use the current date.
+  useEffect(() => {
+    setValue("invoiceDate", new Date().toISOString());
+  }, [setValue]);
+
   return (
     <div className="space-y-6 pt-8 p-2 border-[#DDDDDD]">
       <h2 className="text-lg font-bold text-[#333333] pb-4 mb-8 border-b border-[#DDDDDD]">
@@ -86,14 +91,19 @@ export function InvoiceDetailsSection({
         />
       </div>
 
-      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Invoice Number */}
         <div>
           <Label htmlFor="invoiceNumber" className="mb-2 block">
             {t("invoice.number")}
           </Label>
-          <Input id="invoiceNumber" className="input-base" type="text" placeholder="e.g. INV-0001" {...register("invoiceNumber")} />
+          <Input
+            id="invoiceNumber"
+            className="input-base"
+            type="text"
+            placeholder="e.g. INV-0001"
+            {...register("invoiceNumber")}
+          />
           {errors.invoiceNumber && (
             <p className="mt-2 text-sm text-red-600">{errors.invoiceNumber.message}</p>
           )}
@@ -137,9 +147,9 @@ export function InvoiceDetailsSection({
           <Controller
             name="dueDate"
             control={control}
-            defaultValue={new Date().toISOString()}
+            defaultValue=""
             render={({ field }) => {
-              const value = field.value ? new Date(field.value) : new Date();
+              const value = field.value ? new Date(field.value) : null;
               return (
                 <Popover>
                   <PopoverTrigger asChild>
@@ -152,7 +162,7 @@ export function InvoiceDetailsSection({
                     <Calendar
                       className="w-auto !bg-white rounded-md"
                       mode="single"
-                      selected={value}
+                      selected={value || undefined}
                       onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
                       initialFocus
                     />
@@ -210,7 +220,13 @@ export function InvoiceDetailsSection({
             <Label htmlFor="description" className="mb-2 block">
               Description
             </Label>
-            <Textarea id="description" rows={3} {...register("description")} placeholder="e.g. Description of services provided" className="border-2 border-gray-300 rounded-sm" />
+            <Textarea
+              id="description"
+              rows={3}
+              {...register("description")}
+              placeholder="e.g. Description of services provided"
+              className="border-2 border-gray-300 rounded-sm"
+            />
           </div>
         </div>
       )}
@@ -268,15 +284,16 @@ export function InvoiceDetailsSection({
           <Label htmlFor="gstRate" className="mb-2 block">
             {t("invoice.gstRate")}
           </Label>
-          <Input 
-            id="gstRate" 
-            type="number" 
+          <Input
+            id="gstRate"
+            type="number"
             step={0.01}
             min={0}
-            placeholder="0.15" 
-            defaultValue={0.15} 
+            placeholder="0.15"
+            defaultValue={0.15}
             className="input-base"
-            {...register("gstRate")} />
+            {...register("gstRate")}
+          />
         </div>
       )}
 
@@ -285,7 +302,13 @@ export function InvoiceDetailsSection({
         <Label htmlFor="notes" className="mb-2 block">
           {t("invoice.notes")}
         </Label>
-        <Textarea id="notes" rows={4} {...register("notes")} placeholder="e.g. Additional notes or instructions for this invoice" className="border-2 border-gray-300 rounded-sm font-semibold" />
+        <Textarea
+          id="notes"
+          rows={4}
+          {...register("notes")}
+          placeholder="e.g. Additional notes or instructions for this invoice"
+          className="border-2 border-gray-300 rounded-sm font-semibold"
+        />
       </div>
     </div>
   );
