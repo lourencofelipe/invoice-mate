@@ -72,7 +72,7 @@ export function InvoiceForm() {
         InvoiceDate: data.invoiceDate,
         DueDate: data.dueDate || null,
         ApplyGst: data.applyGst || false,
-        GstRate: data.applyGst && data.gstRate ? parseFloat(data.gstRate) : null,
+        GstRate: data.applyGst ? parseFloat(data.gstRate ?? "0.15") : 0,
         Notes: data.notes || null,
         Items:
           data.type === "time-based"

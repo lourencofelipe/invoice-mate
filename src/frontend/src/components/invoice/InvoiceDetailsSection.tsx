@@ -268,7 +268,15 @@ export function InvoiceDetailsSection({
           <Label htmlFor="gstRate" className="mb-2 block">
             {t("invoice.gstRate")}
           </Label>
-          <Input id="gstRate" type="text" placeholder="0.15" {...register("gstRate")} className="input-base" />
+          <Input 
+            id="gstRate" 
+            type="number" 
+            step={0.01}
+            min={0}
+            placeholder="0.15" 
+            defaultValue={0.15} 
+            className="input-base"
+            {...register("gstRate")} />
         </div>
       )}
 
