@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { createInvoice } from "@/api/invoices/invoiceApi";
-//import { LanguageToggle } from "./LanguageToggle";
 import { ReceiverSection } from "./ReceiverSection";
 import { BillToSection } from "./BillToSection";
 import { InvoiceDetailsSection } from "./InvoiceDetailsSection";
@@ -14,7 +13,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { invoiceSchema, InvoiceFormData } from "@/lib/validation/invoiceSchema";
 
 export function InvoiceForm() {
-  //const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -25,13 +23,17 @@ export function InvoiceForm() {
     formState: { errors },
     watch,
     control,
+    setValue,
   } = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: {
       invoiceDate: new Date().toISOString().split("T")[0],
       currency: "",
       applyGst: false,
+      type: "time-based",
+      items: [],
     },
+    mode: "onSubmit",
   });
 
   const onSubmit = async (data: InvoiceFormData) => {
@@ -42,7 +44,7 @@ export function InvoiceForm() {
     try {
       const apiData = {
         InvoiceNumber: data.invoiceNumber,
-        Type: "product-based",
+        Type: data.type,
         SenderName: data.receiverCompany,
         SenderEmail: data.receiverEmail,
         SenderPhoneNumber: data.receiverPhone || null,
@@ -68,39 +70,37 @@ export function InvoiceForm() {
         },
         Currency: data.currency,
         InvoiceDate: data.invoiceDate,
-        DueDate: data.dueDate,
+        DueDate: data.dueDate || null,
         ApplyGst: data.applyGst || false,
         GstRate: data.applyGst && data.gstRate ? parseFloat(data.gstRate) : null,
         Notes: data.notes || null,
-        Items: [
-          {
-            Description: data.description,
-            Hours: null,
-            HourlyRate: null,
-            Quantity: 1,
-            UnitPrice: parseFloat(data.amount),
-          },
-        ],
+        Items:
+          data.type === "time-based"
+            ? [
+                {
+                  Description: data.description ?? "",
+                  Hours: parseFloat(String(data.hours ?? "0")),
+                  HourlyRate: parseFloat(String(data.hourRate ?? "0")),
+                  Quantity: 1,
+                  UnitPrice:
+                    parseFloat(String(data.hourRate ?? "0")) *
+                    parseFloat(String(data.hours ?? "0")),
+                },
+              ]
+            : (data.items ?? []).map((item) => ({
+                Description: item.description,
+                Quantity: Number(item.quantity),
+                UnitPrice: Number(item.unitPrice),
+              })),
       };
 
-      const response = await createInvoice(apiData);
-
-      // Gera e baixa o PDF
-      const blob = new Blob([response.data], { type: "application/pdf" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Invoice_${data.invoiceNumber}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Chama a função que gera e baixa o PDF
+      await createInvoice(apiData);
 
       setSubmitSuccess(true);
       setTimeout(() => window.location.reload(), 2000);
     } catch (error) {
-      let errorMessage = "An error occurred while generating the invoice";
-
+      let errorMessage = "An error occurred while generating the invoice.";
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         errorMessage =
@@ -110,7 +110,6 @@ export function InvoiceForm() {
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       setSubmitError(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -119,31 +118,37 @@ export function InvoiceForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
-      
-
       {submitSuccess && (
         <Alert className="bg-green-50 border-green-200">
           <AlertDescription className="text-green-800">
-            {"Invoice generated successfully!"}
+            Invoice generated successfully!
           </AlertDescription>
         </Alert>
       )}
 
       {submitError && (
         <Alert className="bg-red-50 border-red-200">
-          <AlertDescription className="text-red-800">
-            {submitError}
-          </AlertDescription>
+          <AlertDescription className="text-red-800">{submitError}</AlertDescription>
         </Alert>
       )}
 
       <ReceiverSection register={register} errors={errors} />
       <BillToSection register={register} errors={errors} />
-      <InvoiceDetailsSection register={register} errors={errors} watch={watch} control={control} />
+      <InvoiceDetailsSection
+        register={register}
+        errors={errors}
+        watch={watch}
+        control={control}
+        setValue={setValue}
+      />
 
       <div className="pt-10 mt-6 border-t border-[#DDDDDD] flex justify-center">
-        <Button type="submit" disabled={isSubmitting} className="min-w-48 h-11 bg-[#1f41ff] text-base">
-          {isSubmitting ? "submitting" : "Generate Invoice"}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="min-w-48 h-11 bg-[#1f41ff] text-base"
+        >
+          {isSubmitting ? "Submitting..." : "Generate Invoice"}
         </Button>
       </div>
     </form>

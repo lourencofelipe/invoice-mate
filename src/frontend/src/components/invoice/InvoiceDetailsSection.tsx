@@ -7,6 +7,7 @@ import {
   UseFormWatch,
   Controller,
   Control,
+  useFieldArray,
 } from "react-hook-form";
 import { useLanguage } from "./LanguageProvider";
 import { InvoiceFormData } from "@/lib/validation/invoiceSchema";
@@ -25,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, PlusCircle, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface InvoiceDetailsSectionProps {
@@ -33,6 +34,7 @@ interface InvoiceDetailsSectionProps {
   errors: FieldErrors<InvoiceFormData>;
   watch: UseFormWatch<InvoiceFormData>;
   control: Control<InvoiceFormData>;
+  setValue: (field: string, value: any) => void;
 }
 
 export function InvoiceDetailsSection({
@@ -40,9 +42,20 @@ export function InvoiceDetailsSection({
   errors,
   control,
   watch,
+  setValue,
 }: InvoiceDetailsSectionProps) {
   const { t } = useLanguage();
   const applyGst = watch("applyGst");
+  const type = watch("type");
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "items",
+  });
+
+  const handleAddItem = () => {
+    append({ description: "", quantity: 1, unitPrice: 0 });
+  };
 
   return (
     <div className="space-y-6 pt-8 p-2 border-[#DDDDDD]">
@@ -50,6 +63,30 @@ export function InvoiceDetailsSection({
         {t("invoice.title")}
       </h2>
 
+      {/* Type Selector */}
+      <div>
+        <Label htmlFor="type" className="mb-2 block">
+          Invoice Type
+        </Label>
+        <Controller
+          name="type"
+          control={control}
+          defaultValue="time-based"
+          render={({ field }) => (
+            <Select value={field.value} onValueChange={(val) => setValue("type", val)}>
+              <SelectTrigger id="type" className="input-base">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="time-based">Time-based</SelectItem>
+                <SelectItem value="product-based">Product-based</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
+
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Invoice Number */}
         <div>
@@ -58,9 +95,7 @@ export function InvoiceDetailsSection({
           </Label>
           <Input id="invoiceNumber" className="input-base" type="text" {...register("invoiceNumber")} />
           {errors.invoiceNumber && (
-            <p className="mt-2 text-sm text-red-600">
-              {errors.invoiceNumber.message}
-            </p>
+            <p className="mt-2 text-sm text-red-600">{errors.invoiceNumber.message}</p>
           )}
         </div>
 
@@ -76,10 +111,7 @@ export function InvoiceDetailsSection({
               return (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="justify-start text-left font-normal input-base"
-                    >
+                    <Button variant="outline" className="justify-start text-left font-normal input-base">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
                     </Button>
@@ -89,9 +121,7 @@ export function InvoiceDetailsSection({
                       className="w-auto !bg-white rounded-md"
                       mode="single"
                       selected={value}
-                      onSelect={(date) =>
-                        field.onChange(date ? date.toISOString() : "")
-                      }
+                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
                       initialFocus
                     />
                   </PopoverContent>
@@ -99,9 +129,6 @@ export function InvoiceDetailsSection({
               );
             }}
           />
-          {errors.invoiceDate && (
-            <p className="mt-1 text-sm text-red-600">{errors.invoiceDate.message}</p>
-          )}
         </div>
 
         {/* Due Date */}
@@ -116,10 +143,7 @@ export function InvoiceDetailsSection({
               return (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="justify-start text-left font-normal input-base"
-                    >
+                    <Button variant="outline" className="justify-start text-left font-normal input-base">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
                     </Button>
@@ -129,9 +153,7 @@ export function InvoiceDetailsSection({
                       className="w-auto !bg-white rounded-md"
                       mode="single"
                       selected={value}
-                      onSelect={(date) =>
-                        field.onChange(date ? date.toISOString() : "")
-                      }
+                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
                       initialFocus
                     />
                   </PopoverContent>
@@ -139,9 +161,6 @@ export function InvoiceDetailsSection({
               );
             }}
           />
-          {errors.dueDate && (
-            <p className="mt-1 text-sm text-red-600">{errors.dueDate.message}</p>
-          )}
         </div>
 
         {/* Currency */}
@@ -167,34 +186,68 @@ export function InvoiceDetailsSection({
               </Select>
             )}
           />
-          {errors.currency && (
-            <p className="mt-2 text-sm text-red-600">{errors.currency.message}</p>
-          )}
         </div>
       </div>
 
-      {/* Description */}
-      <div>
-        <Label htmlFor="description" className="mb-2 block">
-          {t("invoice.description")}
-        </Label>
-        <Textarea id="description" rows={4} {...register("description")} 
-        className="border-2 border-gray-300 rounded-sm font-semibold h-auto overflow-hidden" />
-        {errors.description && (
-          <p className="mt-2 text-sm text-red-600">{errors.description.message}</p>
-        )}
-      </div>
+      {/* --- Time-based Fields --- */}
+      {type === "time-based" && (
+        <div className="space-y-4 border-t pt-6 mt-4">
+          <Label className="font-semibold text-gray-700">Time-based Details</Label>
 
-      {/* Amount */}
-      <div>
-        <Label htmlFor="amount" className="mb-2 block">
-          {t("invoice.amount")}
-        </Label>
-        <Input id="amount" type="text" placeholder="0.00" {...register("amount")} className="input-base" />
-        {errors.amount && (
-          <p className="mt-2 text-sm text-red-600">{errors.amount.message}</p>
-        )}
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="hours">Hours</Label>
+              <Input id="hours" type="number" step="0.1" placeholder="e.g. 10" {...register("hours")} />
+            </div>
+
+            <div>
+              <Label htmlFor="hourRate">Hourly Rate</Label>
+              <Input id="hourRate" type="number" step="0.01" placeholder="e.g. 80" {...register("hourRate")} />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="description" className="mb-2 block">
+              Description
+            </Label>
+            <Textarea id="description" rows={3} {...register("description")} className="border-2 border-gray-300 rounded-sm" />
+          </div>
+        </div>
+      )}
+
+      {/* --- Product-based Fields --- */}
+      {type === "product-based" && (
+        <div className="space-y-4 border-t pt-6 mt-4">
+          <Label className="font-semibold text-gray-700">Products</Label>
+
+          {fields.map((item, index) => (
+            <div key={item.id} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-md bg-gray-50">
+              <div className="md:col-span-2">
+                <Label>Description</Label>
+                <Input {...register(`items.${index}.description` as const)} placeholder="Product description" />
+              </div>
+
+              <div>
+                <Label>Qty</Label>
+                <Input type="number" step="1" {...register(`items.${index}.quantity` as const)} placeholder="1" />
+              </div>
+
+              <div>
+                <Label>Unit Price</Label>
+                <Input type="number" step="0.01" {...register(`items.${index}.unitPrice` as const)} placeholder="0.00" />
+              </div>
+
+              <Button type="button" variant="ghost" onClick={() => remove(index)} className="text-red-500 hover:text-red-700">
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          ))}
+
+          <Button type="button" variant="outline" onClick={handleAddItem} className="flex items-center gap-2">
+            <PlusCircle className="w-4 h-4" /> Add Product
+          </Button>
+        </div>
+      )}
 
       {/* GST */}
       <div className="flex items-center space-x-2">
@@ -202,12 +255,7 @@ export function InvoiceDetailsSection({
           name="applyGst"
           control={control}
           render={({ field }) => (
-            <Checkbox
-              id="applyGst"
-              className="border-2 "
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
+            <Checkbox id="applyGst" className="border-2" checked={field.value} onCheckedChange={field.onChange} />
           )}
         />
         <Label htmlFor="applyGst" className="mb-0 cursor-pointer">
@@ -221,9 +269,6 @@ export function InvoiceDetailsSection({
             {t("invoice.gstRate")}
           </Label>
           <Input id="gstRate" type="text" placeholder="0.15" {...register("gstRate")} className="input-base" />
-          {errors.gstRate && (
-            <p className="mt-2 text-sm text-red-600">{errors.gstRate.message}</p>
-          )}
         </div>
       )}
 
