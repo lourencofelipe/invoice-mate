@@ -33,8 +33,8 @@ public class CreateInvoiceUseCase
             request.DueDate,
             items,
             request.Notes,
-            applyGst: true,
-            gstRate: 0.15m);
+            applyGst: request.ApplyGst,
+            gstRate: request.GstRate ?? 0.15m);
 
         var pdfBytes = await _pdfGenerator.GenerateAsync(invoice, ct);
 
