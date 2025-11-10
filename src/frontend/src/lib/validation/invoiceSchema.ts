@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Schema de cada item para modo "item-based"
+
 export const invoiceItemSchema = z.object({
   description: z.string().min(1, "Description is required"),
   quantity: z
@@ -15,7 +15,22 @@ export const invoiceItemSchema = z.object({
     }),
 });
 
-// Schema principal
+
+export const professionalSchema = z.object({
+  name: z.string().min(1, "Professional name is required"),
+  hours: z
+    .union([z.string(), z.number()])
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Hours must be a valid number",
+    }),
+  hourlyRate: z
+    .union([z.string(), z.number()])
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: "Hourly rate must be a valid number",
+    }),
+});
+
+
 export const invoiceSchema = z
   .object({
     // Sender (receiver)
@@ -67,8 +82,12 @@ export const invoiceSchema = z
         { message: "Hourly rate must be a valid number" }
       ),
 
+    // Professionals (time-based)
+    professionals: z.array(professionalSchema).optional().default([]),
+    hasMultipleProfessionals: z.boolean().optional().default(false),
+
     // Item-based fields
-    items: z.array(invoiceItemSchema).optional(),
+    items: z.array(invoiceItemSchema).optional().default([]),
   })
   .superRefine((data, ctx) => {
     // GST validation
@@ -91,27 +110,42 @@ export const invoiceSchema = z
       }
     }
 
-    // Validação condicional por tipo de invoice
+    // Time-based invoice validation
     if (data.type === "time-based") {
-      if (!data.description || !data.hours || !data.hourRate) {
+      if (!data.description && (!data.hasMultipleProfessionals || data.professionals.length === 0)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Description, hours and hourly rate are required for time-based invoices",
+          message:
+            "Description or at least one professional is required for time-based invoices",
           path: ["description"],
+        });
+      }
+
+      
+      if (data.hasMultipleProfessionals) {
+        data.professionals.forEach((pro, index) => {
+          if (!pro.name || pro.hours === undefined || pro.hourlyRate === undefined) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Each professional must have name, hours, and hourly rate",
+              path: [`professionals.${index}`],
+            });
+          }
         });
       }
     }
 
+    // Product-based invoice validation
     if (data.type === "product-based") {
       if (!data.items || data.items.length === 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "At least one item is required for item-based invoices",
+          message: "At least one item is required for product-based invoices",
           path: ["items"],
         });
       }
     }
   });
 
-// Tipo inferido
+
 export type InvoiceFormData = z.infer<typeof invoiceSchema>;

@@ -37,6 +37,11 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
       applyGst: false,
       type: invoiceType,
       items: [],
+      professionals: [],
+      hasMultipleProfessionals: false,
+      description: "",
+      hours: 0,
+      hourRate: 0,
     },
     mode: "onSubmit",
   });
@@ -47,6 +52,38 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
     setSubmitSuccess(false);
 
     try {
+      let itemsPayload;
+
+      if (data.type === "time-based") {
+        const professionals = data.professionals || [];
+
+        if (data.hasMultipleProfessionals && professionals.length > 0) {
+          itemsPayload = professionals.map((pro) => ({
+            Description: data.description || "Service provided",
+            Hours: Number(pro.hours ?? 0),
+            HourlyRate: Number(pro.hourlyRate ?? 0),
+            Quantity: 1,
+            UnitPrice: Number(pro.hours ?? 0) * Number(pro.hourlyRate ?? 0),
+          }));
+        } else {
+          itemsPayload = [
+            {
+              Description: data.description || "Service provided",
+              Hours: Number(data.hours ?? 0),
+              HourlyRate: Number(data.hourRate ?? 0),
+              Quantity: 1,
+              UnitPrice: Number(data.hours ?? 0) * Number(data.hourRate ?? 0),
+            },
+          ];
+        }
+      } else {
+        itemsPayload = (data.items ?? []).map((item) => ({
+          Description: item.description,
+          Quantity: Number(item.quantity),
+          UnitPrice: Number(item.unitPrice),
+        }));
+      }
+
       const apiData = {
         InvoiceNumber: data.invoiceNumber,
         Type: data.type,
@@ -79,28 +116,10 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
         ApplyGst: data.applyGst || false,
         GstRate: data.applyGst ? parseFloat(data.gstRate ?? "0.15") : 0,
         Notes: data.notes || null,
-        Items:
-          data.type === "time-based"
-            ? [
-                {
-                  Description: data.description ?? "",
-                  Hours: parseFloat(String(data.hours ?? "0")),
-                  HourlyRate: parseFloat(String(data.hourRate ?? "0")),
-                  Quantity: 1,
-                  UnitPrice:
-                    parseFloat(String(data.hourRate ?? "0")) *
-                    parseFloat(String(data.hours ?? "0")),
-                },
-              ]
-            : (data.items ?? []).map((item) => ({
-                Description: item.description,
-                Quantity: Number(item.quantity),
-                UnitPrice: Number(item.unitPrice),
-              })),
+        Items: itemsPayload,
       };
 
       await createInvoice(apiData);
-
       setSubmitSuccess(true);
       setTimeout(() => window.location.reload(), 2000);
     } catch (error) {

@@ -23,7 +23,6 @@ function InvoiceHeader({ invoiceType }: { invoiceType: string }) {
 }
 
 export default function Home() {
-  // Estado levantado para controlar o tipo de invoice
   const [invoiceType, setInvoiceType] = useState("time-based");
 
   return (

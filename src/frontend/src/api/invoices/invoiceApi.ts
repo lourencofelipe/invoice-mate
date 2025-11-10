@@ -60,7 +60,7 @@ export async function createInvoice(
   const link = document.createElement("a");
   link.href = url;
 
-  // Usa o número da fatura como nome do arquivo, se disponível
+
   link.download = `${data.InvoiceNumber || "invoice"}.pdf`;
 
   document.body.appendChild(link);

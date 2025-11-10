@@ -51,15 +51,26 @@ export function InvoiceDetailsSection({
   const { t } = useLanguage();
   const applyGst = watch("applyGst");
   const type = watch("type");
+  const hasMultipleProfessionals = watch("hasMultipleProfessionals");
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
   });
 
-  const handleAddItem = () => {
-    append({ description: "", quantity: 1, unitPrice: 0 });
-  };
+  const {
+    fields: professionalFields,
+    append: appendProfessional,
+    remove: removeProfessional,
+  } = useFieldArray({
+    control,
+    name: "professionals",
+  });
+
+  const handleAddItem = () => append({ description: "", quantity: 1, unitPrice: 0 });
+
+  const handleAddProfessional = () =>
+    appendProfessional({ name: "", hours: "", hourlyRate: "" });
 
   useEffect(() => {
     setValue("invoiceDate", new Date().toISOString());
@@ -71,7 +82,7 @@ export function InvoiceDetailsSection({
         {t("invoice.title")}
       </h2>
 
-      {/* Tipo de Invoice */}
+      {/* Invoice Type */}
       <div>
         <Label htmlFor="type" className="mb-2 block">
           Invoice Type
@@ -213,19 +224,80 @@ export function InvoiceDetailsSection({
         <div className="space-y-4 border-t pt-6 mt-4">
           <Label className="font-semibold text-gray-700">Time-based Details</Label>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="hours">Hours</Label>
-              <Input id="hours" type="number" step="0.1" placeholder="e.g. 10" {...register("hours")} />
-            </div>
-
-            <div>
-              <Label htmlFor="hourRate">Hourly Rate</Label>
-              <Input id="hourRate" type="number" step="0.01" placeholder="e.g. 80" {...register("hourRate")} />
-            </div>
+          {/* Option to add multiple professionals */}
+          <div className="flex items-center space-x-2 mt-2">
+            <Controller
+              name="hasMultipleProfessionals"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id="hasMultipleProfessionals"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              )}
+            />
+            <Label htmlFor="hasMultipleProfessionals" className="cursor-pointer">
+              Include multiple professionals
+            </Label>
           </div>
 
-          <div>
+          {/* Professionals Section */}
+          {hasMultipleProfessionals &&
+            professionalFields.map((pro, index) => (
+              <div
+                key={pro.id}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-md bg-gray-50"
+              >
+                <div>
+                  <Label>Professional Name</Label>
+                  <Input
+                    {...register(`professionals.${index}.name` as const)}
+                    placeholder="e.g. John Smith"
+                  />
+                </div>
+                <div>
+                  <Label>Hours</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    {...register(`professionals.${index}.hours`, { valueAsNumber: true })}
+                    placeholder="10"
+                  />
+                </div>
+                <div>
+                  <Label>Hourly Rate</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    {...register(`professionals.${index}.hourlyRate`, { valueAsNumber: true })}
+                    placeholder="80"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => removeProfessional(index)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+
+          {hasMultipleProfessionals && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleAddProfessional}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle className="w-4 h-4" /> Add Professional
+            </Button>
+          )}
+
+          {/* Description Field */}
+          <div className="mt-4">
             <Label htmlFor="description" className="mb-2 block">
               Description
             </Label>
@@ -237,6 +309,21 @@ export function InvoiceDetailsSection({
               className="border-2 border-gray-300 rounded-sm"
             />
           </div>
+
+          {/* Default fields for single professional */}
+          {!hasMultipleProfessionals && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <Label htmlFor="hours">Hours</Label>
+                <Input id="hours" type="number" step="0.1" placeholder="e.g. 10" {...register("hours")} />
+              </div>
+
+              <div>
+                <Label htmlFor="hourRate">Hourly Rate</Label>
+                <Input id="hourRate" type="number" step="0.01" placeholder="e.g. 80" {...register("hourRate")} />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -246,29 +333,57 @@ export function InvoiceDetailsSection({
           <Label className="font-semibold text-gray-700">Deliverable Details</Label>
 
           {fields.map((item, index) => (
-            <div key={item.id} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-md bg-gray-50">
+            <div
+              key={item.id}
+              className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-md bg-gray-50"
+            >
               <div className="md:col-span-2">
                 <Label>Description</Label>
-                <Input {...register(`items.${index}.description` as const)} placeholder="Product description" />
+                <Input
+                  {...register(`items.${index}.description` as const)}
+                  placeholder="Product description"
+                />
               </div>
 
               <div>
                 <Label>Qty</Label>
-                <Input type="number" step="1" min={1} {...register(`items.${index}.quantity` as const)} placeholder="1" />
+                <Input
+                  type="number"
+                  step="1"
+                  min={1}
+                  {...register(`items.${index}.quantity` as const)}
+                  placeholder="1"
+                />
               </div>
 
               <div>
                 <Label>Unit Price</Label>
-                <Input type="number" step="0.01" min={0} {...register(`items.${index}.unitPrice` as const)} placeholder="0.00" />
+                <Input
+                  type="number"
+                  step="0.01"
+                  min={0}
+                  {...register(`items.${index}.unitPrice` as const)}
+                  placeholder="0.00"
+                />
               </div>
 
-              <Button type="button" variant="ghost" onClick={() => remove(index)} className="text-red-500 hover:text-red-700">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => remove(index)}
+                className="text-red-500 hover:text-red-700"
+              >
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
           ))}
 
-          <Button type="button" variant="outline" onClick={handleAddItem} className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleAddItem}
+            className="flex items-center gap-2"
+          >
             <PlusCircle className="w-4 h-4" /> Add Product
           </Button>
         </div>
