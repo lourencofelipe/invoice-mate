@@ -35,6 +35,8 @@ interface InvoiceDetailsSectionProps {
   watch: UseFormWatch<InvoiceFormData>;
   control: Control<InvoiceFormData>;
   setValue: (field: string, value: any) => void;
+  invoiceType: string;
+  setInvoiceType: (type: string) => void;
 }
 
 export function InvoiceDetailsSection({
@@ -43,6 +45,8 @@ export function InvoiceDetailsSection({
   control,
   watch,
   setValue,
+  invoiceType,
+  setInvoiceType,
 }: InvoiceDetailsSectionProps) {
   const { t } = useLanguage();
   const applyGst = watch("applyGst");
@@ -57,7 +61,6 @@ export function InvoiceDetailsSection({
     append({ description: "", quantity: 1, unitPrice: 0 });
   };
 
-  // Update the invoiceDate to use the current date.
   useEffect(() => {
     setValue("invoiceDate", new Date().toISOString());
   }, [setValue]);
@@ -68,7 +71,7 @@ export function InvoiceDetailsSection({
         {t("invoice.title")}
       </h2>
 
-      {/* Type Selector */}
+      {/* Tipo de Invoice */}
       <div>
         <Label htmlFor="type" className="mb-2 block">
           Invoice Type
@@ -76,15 +79,21 @@ export function InvoiceDetailsSection({
         <Controller
           name="type"
           control={control}
-          defaultValue="time-based"
+          defaultValue={invoiceType}
           render={({ field }) => (
-            <Select value={field.value} onValueChange={(val) => setValue("type", val)}>
+            <Select
+              value={field.value}
+              onValueChange={(val) => {
+                field.onChange(val);
+                setInvoiceType(val);
+              }}
+            >
               <SelectTrigger id="type" className="input-base">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="time-based">Time-based</SelectItem>
-                <SelectItem value="product-based">Product-based</SelectItem>
+                <SelectItem value="time-based">Service provision</SelectItem>
+                <SelectItem value="product-based">Deliverables</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -234,7 +243,7 @@ export function InvoiceDetailsSection({
       {/* --- Product-based Fields --- */}
       {type === "product-based" && (
         <div className="space-y-4 border-t pt-6 mt-4">
-          <Label className="font-semibold text-gray-700">Products</Label>
+          <Label className="font-semibold text-gray-700">Deliverable Details</Label>
 
           {fields.map((item, index) => (
             <div key={item.id} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-md bg-gray-50">
@@ -245,12 +254,12 @@ export function InvoiceDetailsSection({
 
               <div>
                 <Label>Qty</Label>
-                <Input type="number" step="1" {...register(`items.${index}.quantity` as const)} placeholder="1" />
+                <Input type="number" step="1" min={1} {...register(`items.${index}.quantity` as const)} placeholder="1" />
               </div>
 
               <div>
                 <Label>Unit Price</Label>
-                <Input type="number" step="0.01" {...register(`items.${index}.unitPrice` as const)} placeholder="0.00" />
+                <Input type="number" step="0.01" min={0} {...register(`items.${index}.unitPrice` as const)} placeholder="0.00" />
               </div>
 
               <Button type="button" variant="ghost" onClick={() => remove(index)} className="text-red-500 hover:text-red-700">
@@ -287,7 +296,7 @@ export function InvoiceDetailsSection({
           <Input
             id="gstRate"
             type="number"
-            step={0.01}
+            step="0.01"
             min={0}
             placeholder="0.15"
             defaultValue={0.15}

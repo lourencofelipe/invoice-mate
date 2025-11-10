@@ -12,7 +12,12 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { invoiceSchema, InvoiceFormData } from "@/lib/validation/invoiceSchema";
 
-export function InvoiceForm() {
+interface InvoiceFormProps {
+  invoiceType: string;
+  setInvoiceType: (type: string) => void;
+}
+
+export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -30,7 +35,7 @@ export function InvoiceForm() {
       invoiceDate: new Date().toISOString().split("T")[0],
       currency: "",
       applyGst: false,
-      type: "time-based",
+      type: invoiceType,
       items: [],
     },
     mode: "onSubmit",
@@ -94,7 +99,6 @@ export function InvoiceForm() {
               })),
       };
 
-      // Chama a função que gera e baixa o PDF
       await createInvoice(apiData);
 
       setSubmitSuccess(true);
@@ -140,6 +144,8 @@ export function InvoiceForm() {
         watch={watch}
         control={control}
         setValue={setValue}
+        invoiceType={invoiceType}
+        setInvoiceType={setInvoiceType}
       />
 
       <div className="pt-10 mt-6 border-t border-[#DDDDDD] flex justify-center">
