@@ -6,6 +6,7 @@ public class LineItem
     // Time-based (services)
     public decimal? Hours { get; private set; }
     public decimal? HourlyRate { get; private set; }
+    public string? ProfessionalName { get; private set; }
 
     // Product-based (fixed items)
     public int? Quantity { get; private set; }
@@ -19,23 +20,25 @@ public class LineItem
        string description,
        decimal? hours,
        decimal? hourlyRate,
+       string? professionalName,
        int? quantity,
        decimal? unitPrice)
     {
         Description = description;
         Hours = hours;
         HourlyRate = hourlyRate;
+        ProfessionalName = professionalName;
         Quantity = quantity;
         UnitPrice = unitPrice;
 
         Total = CalculateTotal();
     }
 
-    public static LineItem ForTimeBased(string description, decimal hours, decimal hourlyRate)
-        => new(description, hours, hourlyRate, null, null);
+    public static LineItem ForTimeBased(string description, decimal hours, decimal hourlyRate, string professionalName)
+        => new(description, hours, hourlyRate, professionalName, null, null);
 
     public static LineItem ForProductBased(string description, int quantity, decimal unitPrice)
-        => new(description, null, null, quantity, unitPrice);
+        => new(description, null, null, null, quantity, unitPrice);
 
     private decimal CalculateTotal()
     {

@@ -7,8 +7,8 @@ public sealed class InvoiceMappingProfile : Profile
 
         CreateMap<InvoiceItemRequest, LineItem>()
             .ConstructUsing(src =>
-                src.Hours.HasValue && src.HourlyRate.HasValue
-                    ? LineItem.ForTimeBased(src.Description, src.Hours.Value, src.HourlyRate.Value)
+                src.Hours.HasValue && src.HourlyRate.HasValue && !string.IsNullOrWhiteSpace(src.ProfessionalName)
+                    ? LineItem.ForTimeBased(src.Description, src.Hours.Value, src.HourlyRate.Value, src.ProfessionalName)
                     : LineItem.ForProductBased(src.Description, src.Quantity!.Value, src.UnitPrice!.Value));
 
         CreateMap<Invoice, CreateInvoiceResponse>()
