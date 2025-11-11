@@ -62,6 +62,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
             Description: data.description || "Service provided",
             Hours: Number(pro.hours ?? 0),
             HourlyRate: Number(pro.hourlyRate ?? 0),
+            ProfessionalName: pro.name,
             Quantity: 1,
             UnitPrice: Number(pro.hours ?? 0) * Number(pro.hourlyRate ?? 0),
           }));

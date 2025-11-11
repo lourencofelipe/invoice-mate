@@ -35,6 +35,7 @@ export interface CreateInvoiceRequest {
     Description: string;
     Hours: number | null;
     HourlyRate: number | null;
+    ProfessionalName: string;
     Quantity: number | null;
     UnitPrice: number | null;
   }>;
