@@ -2,6 +2,7 @@
 public sealed record CreateInvoiceRequest(
     string InvoiceNumber,          // user-provided
     string Type,                   // "time-based" | "product-based"
+    string? ProjectName,
     string SenderName,
     string SenderEmail,
     string? SenderPhoneNumber, // optional

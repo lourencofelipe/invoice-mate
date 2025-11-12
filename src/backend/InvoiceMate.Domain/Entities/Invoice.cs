@@ -7,6 +7,7 @@ public class Invoice
     public Guid Id { get; private set; }
     public string InvoiceNumber { get; private set; }
     public string Type { get; private set; } // "time-based" | "product-based"
+    public string ProjectName { get; set; }
 
     public string SenderName { get; private set; }
     public string SenderEmail { get; private set; }
@@ -37,6 +38,7 @@ public class Invoice
         Guid id,
         string invoiceNumber,
         string type,
+        string projectName,
         string senderName,
         string senderEmail,
         string? senderPhoneNumber,
@@ -55,6 +57,7 @@ public class Invoice
         Id = id;
         InvoiceNumber = invoiceNumber;
         Type = type;
+        ProjectName = projectName;
         SenderName = senderName;
         SenderEmail = senderEmail;
         SenderPhoneNumber = senderPhoneNumber;
@@ -74,6 +77,7 @@ public class Invoice
     public static Invoice Create(
         string invoiceNumber,
         string type,
+        string projectName,
         string senderName,
         string senderEmail,
         string? senderPhoneNumber,
@@ -92,7 +96,7 @@ public class Invoice
         decimal gstRate)
     {
         var invoice = new Invoice(
-            Guid.NewGuid(), invoiceNumber, type,
+            Guid.NewGuid(), invoiceNumber, type, projectName,
             senderName, senderEmail, senderPhoneNumber, senderAddress, senderAccNumber,
             recipientName, recipientEmail, recipientPhoneNumber, recipientAddress,
             currency, invoiceDate, dueDate,

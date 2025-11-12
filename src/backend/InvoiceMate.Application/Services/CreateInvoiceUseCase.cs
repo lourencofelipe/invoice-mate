@@ -19,6 +19,7 @@ public class CreateInvoiceUseCase
         var invoice = Invoice.Create(
             request.InvoiceNumber,
             request.Type,
+             request.ProjectName ?? string.Empty, // Use the non-nullable projectName variable
             request.SenderName,
             request.SenderEmail,
             request.SenderPhoneNumber,
@@ -42,6 +43,7 @@ public class CreateInvoiceUseCase
             InvoiceId: invoice.Id,
             InvoiceNumber: invoice.InvoiceNumber,
             Type: invoice.Type,
+            ProjectName: invoice.ProjectName,
             Currency: invoice.Currency,
             InvoiceDate: invoice.InvoiceDate,
             DueDate: invoice.DueDate,

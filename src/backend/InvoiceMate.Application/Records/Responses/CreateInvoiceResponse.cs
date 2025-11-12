@@ -4,6 +4,7 @@ public sealed record CreateInvoiceResponse(
     Guid InvoiceId,
     string InvoiceNumber,
     string Type,
+    string? ProjectName,
     string Currency,
     DateTime InvoiceDate,
     DateTime DueDate,
