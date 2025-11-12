@@ -60,6 +60,7 @@ export const invoiceSchema = z
     invoiceDate: z.string().min(1, "Date is required"),
     dueDate: z.string().optional(),
     type: z.enum(["time-based", "product-based"]),
+    projectName: z.string().optional(),
     currency: z.string().min(1, "Currency is required"),
     applyGst: z.boolean().default(false),
     gstRate: z.string().optional(),

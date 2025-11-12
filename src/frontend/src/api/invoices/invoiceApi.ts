@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from "axios";
 export interface CreateInvoiceRequest {
   InvoiceNumber: string;
   Type: string;
+  ProjectName: string;
   SenderName: string;
   SenderEmail: string;
   SenderPhoneNumber: string | null;

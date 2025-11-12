@@ -88,6 +88,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
       const apiData = {
         InvoiceNumber: data.invoiceNumber,
         Type: data.type,
+        ProjectName: data.projectName,
         SenderName: data.receiverCompany,
         SenderEmail: data.receiverEmail,
         SenderPhoneNumber: data.receiverPhone || null,
