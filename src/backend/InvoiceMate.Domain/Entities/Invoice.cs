@@ -11,6 +11,7 @@ public class Invoice
 
     public string SenderName { get; private set; }
     public string SenderEmail { get; private set; }
+    public string? SenderWebsite { get; private set; }
     public string? SenderPhoneNumber { get; private set; }
     public Address? SenderAddress { get; private set; }
     public string? SenderAccNumber { get; private set; }
@@ -41,6 +42,7 @@ public class Invoice
         string projectName,
         string senderName,
         string senderEmail,
+        string? senderWebSite,
         string? senderPhoneNumber,
         Address? senderAddress,
         string? senderAccNumber,
@@ -60,6 +62,7 @@ public class Invoice
         ProjectName = projectName;
         SenderName = senderName;
         SenderEmail = senderEmail;
+        SenderWebsite = senderWebSite;
         SenderPhoneNumber = senderPhoneNumber;
         SenderAddress = senderAddress;
         SenderAccNumber = senderAccNumber;
@@ -80,6 +83,7 @@ public class Invoice
         string projectName,
         string senderName,
         string senderEmail,
+        string? senderWebSite,
         string? senderPhoneNumber,
         Address? senderAddress,
         string? senderAccNumber,
@@ -97,7 +101,7 @@ public class Invoice
     {
         var invoice = new Invoice(
             Guid.NewGuid(), invoiceNumber, type, projectName,
-            senderName, senderEmail, senderPhoneNumber, senderAddress, senderAccNumber,
+            senderName, senderEmail,senderWebSite, senderPhoneNumber, senderAddress, senderAccNumber,
             recipientName, recipientEmail, recipientPhoneNumber, recipientAddress,
             currency, invoiceDate, dueDate,
             items, notes);

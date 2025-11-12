@@ -22,6 +22,7 @@ public class CreateInvoiceUseCase
              request.ProjectName ?? string.Empty, // Use the non-nullable projectName variable
             request.SenderName,
             request.SenderEmail,
+            request.SenderWebSite,
             request.SenderPhoneNumber,
             senderAddress,
             request.SenderAccNumber,

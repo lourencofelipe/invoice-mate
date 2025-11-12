@@ -5,6 +5,7 @@ public sealed record CreateInvoiceRequest(
     string? ProjectName,
     string SenderName,
     string SenderEmail,
+    string SenderWebSite,
     string? SenderPhoneNumber, // optional
     AddressRequest? SenderAddress,
     string? SenderAccNumber,     // optional, e.g., bank account number
