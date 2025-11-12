@@ -91,6 +91,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
         ProjectName: data.projectName,
         SenderName: data.receiverCompany,
         SenderEmail: data.receiverEmail,
+        SenderWebSite: data.senderWebSite,
         SenderPhoneNumber: data.receiverPhone || null,
         SenderAddress: {
           Line1: data.receiverAddress || null,

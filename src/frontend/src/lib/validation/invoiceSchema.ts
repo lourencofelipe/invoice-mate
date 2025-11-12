@@ -36,6 +36,7 @@ export const invoiceSchema = z
     // Sender (receiver)
     receiverCompany: z.string().min(1, "Company name is required"),
     receiverEmail: z.string().email("Invalid email address"),
+    senderWebSite: z.string().optional(),
     receiverPhone: z.string().optional(),
     receiverAccNumber: z.string().optional(),
     receiverZip: z.string().optional(),
