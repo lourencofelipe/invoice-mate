@@ -1,0 +1,489 @@
+﻿@model InvoiceMate.Domain.Entities.Invoice
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Invoice @Model.InvoiceNumber</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #24314a;
+            background: #ffffff;
+            padding: 0;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .invoice-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+
+        /* Header Section - Blue Background */
+        .header {
+            background: #2F80ED;
+            color: white;
+            padding: 36px 40px;
+            text-align: center;
+        }
+
+            .header h1 {
+                font-size: 28px;
+                font-weight: 700;
+                margin: 0;
+                letter-spacing: 0.2px;
+            }
+
+            .header .project-name {
+                font-weight: 500;
+                font-size: 28px;
+                opacity: 0.95;
+            }
+
+        /* Information Cards Section */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 28px 40px;
+            background-color: rgba(47, 128, 237, 0.03);
+        }
+
+        .info-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(34, 43, 63, 0.06);
+            min-height: 110px;
+        }
+
+            .info-card h3 {
+                color: #1976F3;
+                font-size: 14px;
+                font-weight: 700;
+                margin: 0 0 12px 0;
+                text-transform: none;
+            }
+
+            .info-card p {
+                font-size: 13px;
+                color: #6c7a93;
+                line-height: 1.6;
+                margin: 0;
+            }
+
+            .info-card strong {
+                color: #24314a;
+                font-weight: 600;
+            }
+
+        /* Project Details Section */
+        .project-details {
+            padding: 0 40px 28px 40px;
+            background: #ffffff;
+        }
+
+            .project-details h2 {
+                font-size: 16px;
+                font-weight: 700;
+                color: #24314a;
+                margin: 0 0 12px 0;
+            }
+
+            .project-details p {
+                font-size: 14px;
+                color: #6c7a93;
+                line-height: 1.6;
+                margin: 0;
+            }
+
+        /* Deliverables Table */
+        .table-container {
+            padding: 0 40px;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+
+        thead th {
+            font-size: 13px;
+            font-weight: 600;
+            color: #24314a;
+            text-align: left;
+            padding: 16px 0;
+            border-bottom: 1px solid #e8eef9;
+        }
+
+            thead th.right {
+                text-align: right;
+                padding: 16px 16px;
+            }
+
+        tbody td {
+            font-size: 14px;
+            color: #24314a;
+            padding: 14px 16px;
+            border-top: 1px solid #f3f6fb;
+        }
+
+            tbody td.right {
+                text-align: right;
+            }
+
+        tbody tr:nth-child(odd) {
+            background: #eef6ff;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #ffffff;
+        }
+
+        tbody tr:first-child td {
+            border-top: none;
+        }
+
+        /* Summary Section */
+        .summary {
+            padding: 0 40px 28px 40px;
+            background: #ffffff;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .summary-content {
+            width: 340px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+            .summary-row.subtotal {
+                background: #eef6ff;
+            }
+
+                .summary-row.subtotal .label,
+                .summary-row.subtotal .amount {
+                    color: #1976F3;
+                    font-weight: 600;
+                    font-size: 14px;
+                }
+
+            .summary-row.tax {
+                background: #eaf6f0;
+            }
+
+                .summary-row.tax .label,
+                .summary-row.tax .amount {
+                    color: #24314a;
+                    font-size: 14px;
+                }
+
+            .summary-row.total {
+                background: #eef6ff;
+            }
+
+                .summary-row.total .label,
+                .summary-row.total .amount {
+                    color: #1976F3;
+                    font-weight: 700;
+                    font-size: 15px;
+                }
+
+            .summary-row .label {
+                font-size: 14px;
+            }
+
+            .summary-row .amount {
+                font-size: 14px;
+            }
+
+        /* Footer Section */
+        .footer {
+            background: linear-gradient(#eef6ff, #FFFFFF) !important;
+            padding: 28px 40px;
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-placeholder {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c3d6ff, #e8f0ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+            .logo-placeholder svg {
+                width: 40px;
+                height: 40px;
+            }
+
+        .footer-center {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+            .footer-center h3,
+            .footer-right h3 {
+                font-size: 13px;
+                font-weight: 700;
+                color: #24314a;
+                margin: 0 0 8px 0;
+            }
+
+            .footer-center p,
+            .footer-right p {
+                font-size: 13px;
+                color: #6c7a93;
+                line-height: 1.6;
+                margin: 0;
+            }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        /* Utility Classes */
+        .right {
+            text-align: right;
+        }
+
+        /* Print Styles */
+        @@media print {
+            body {
+                background: #ffffff;
+            }
+
+            .invoice-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Invoice <span class="project-name">| @(string.IsNullOrEmpty(Model.ProjectName) ? "[Project name]" : Model.ProjectName)</span></h1>
+        </div>
+
+        <!-- Information Cards -->
+        <div class="info-cards">
+            <!-- Bill To Card -->
+            <div class="info-card">
+                <h3>Bill To</h3>
+                <p>
+                    <strong>@Model.RecipientName</strong><br />
+                    @Model.RecipientEmail<br />
+                    @if (!string.IsNullOrEmpty(Model.RecipientPhoneNumber))
+                    {
+                        <text>@Model.RecipientPhoneNumber<br /></text>
+                    }
+                    @if (Model.RecipientAddress != null)
+                    {
+                        <text>
+                            @Model.RecipientAddress.Line1<br />
+                            @if (!string.IsNullOrEmpty(Model.RecipientAddress.City))
+                            {
+                                <text>@Model.RecipientAddress.City</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.RecipientAddress.Region))
+                            {
+                                <text>, @Model.RecipientAddress.Region</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.RecipientAddress.Postcode))
+                            {
+                                <text> @Model.RecipientAddress.Postcode</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.RecipientAddress.Country))
+                            {
+                                <text> @Model.RecipientAddress.Country</text>
+                            }
+                        </text>
+                    }
+                </p>
+            </div>
+
+            <!-- From Card -->
+            <div class="info-card">
+                <h3>From</h3>
+                <p>
+                    <strong>@Model.SenderName</strong><br />
+                    @Model.SenderEmail<br />
+                    @if (!string.IsNullOrEmpty(Model.SenderPhoneNumber))
+                    {
+                        <text>@Model.SenderPhoneNumber<br /></text>
+                    }
+                    @if (Model.SenderAddress != null)
+                    {
+                        <text>
+                            @Model.SenderAddress.Line1<br />
+                            @if (!string.IsNullOrEmpty(Model.SenderAddress.City))
+                            {
+                                <text>@Model.SenderAddress.City</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SenderAddress.Region))
+                            {
+                                <text>, @Model.SenderAddress.Region</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SenderAddress.Postcode))
+                            {
+                                <text> @Model.SenderAddress.Postcode</text>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.SenderAddress.Country))
+                            {
+                                <text> @Model.SenderAddress.Country</text>
+                            }
+                        </text>
+                    }
+                </p>
+            </div>
+
+            <!-- Invoice Details Card -->
+            <div class="info-card">
+                <h3>Invoice details</h3>
+                <p>
+                    <strong>Invoice number:</strong> @Model.InvoiceNumber<br />
+                    <strong>Issue date:</strong> @Model.InvoiceDate.ToString("dd-MM-yyyy")<br />
+                    <strong>Due date:</strong> @(Model.DueDate == DateTime.MinValue ? "-" : Model.DueDate.ToString("dd-MM-yyyy"))<br />
+                    @if (!string.IsNullOrEmpty(Model.ProjectName))
+                    {
+                        <text>@Model.ProjectName</text>
+                    }
+                </p>
+            </div>
+        </div>
+
+        <!-- Project Details Section -->
+        <div class="project-details">
+            <h2>Project details</h2>
+            <p>
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    @(System.Net.WebUtility.HtmlEncode(Model.Notes).Replace("\n", "<br/>"))
+                }
+                else
+                {
+                    <text>
+                        Activities example:<br />
+                        • Updating interior drawings for pricing.<br />
+                        • Updating construction drawings set for printing.<br />
+                        • Liaising with Zeal Print for A1 copies and picking them.<br />
+                        • And continuing discussions with yourselves.
+                    </text>
+                }
+            </p>
+        </div>
+
+        <!-- Deliverables Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Deliverables</th>
+                        <th class="right">Quantity</th>
+                        <th class="right">Unit Price (@Model.Currency)</th>
+                        <th class="right">Total (@Model.Currency)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td class="right">@(item.Quantity?.ToString() ?? "0")</td>
+                            <td class="right">@String.Format("{0:0.00}", item.UnitPrice ?? 0)</td>
+                            <td class="right">@String.Format("{0:0.00}", item.Total)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary">
+            <div class="summary-content">
+                <div class="summary-row subtotal">
+                    <span class="label">Subtotal:</span>
+                    <span class="amount">@Model.Currency @String.Format("{0:0.00}", Model.Subtotal)</span>
+                </div>
+                <div class="summary-row tax">
+                    <span class="label">Tax (GST):</span>
+                    <span class="amount">@Model.Currency @String.Format("{0:0.00}", Model.Tax)</span>
+                </div>
+                <div class="summary-row total">
+                    <span class="label">Total:</span>
+                    <span class="amount">@Model.Currency @String.Format("{0:0.00}", Model.Total)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-left">
+                <div class="logo-placeholder">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20" fill="#cfe0ff" />
+                        <circle cx="26" cy="14" r="8" fill="#e8f0ff" />
+                    </svg>
+                </div>
+            </div>
+            <div class="footer-center">
+                <h3>Details:</h3>
+                <p>
+                    Payable to: @Model.SenderName<br />
+                    Acc No: @(string.IsNullOrEmpty(Model.SenderAccNumber) ? "-" : Model.SenderAccNumber)
+                </p>
+            </div>
+            <div class="footer-right">
+                <h3>Contact details:</h3>
+                <p>
+                    @Model.SenderName<br />
+                    @if (Model.SenderAddress != null)
+                    {
+                        <text>@Model.SenderAddress.Line1<br /></text>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.SenderWebsite))
+                    {
+                        <text>@Model.SenderWebsite</text>
+                    }
+                    else
+                    {
+                        <text>@Model.SenderEmail</text>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
