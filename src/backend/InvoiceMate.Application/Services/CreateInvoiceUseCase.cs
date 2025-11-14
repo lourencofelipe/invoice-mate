@@ -19,7 +19,7 @@ public class CreateInvoiceUseCase
         var invoice = Invoice.Create(
             request.InvoiceNumber,
             request.Type,
-             request.ProjectName ?? string.Empty, // Use the non-nullable projectName variable
+            request.ProjectName ?? string.Empty,
             request.SenderName,
             request.SenderEmail,
             request.SenderWebSite,
