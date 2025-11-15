@@ -1,0 +1,9 @@
+﻿global using InvoiceMate.Application.Interfaces.Services;
+global using InvoiceMate.Application.Records.Requests;
+global using InvoiceMate.Application.Services;
+global using InvoiceMate.Domain.ValueObjects;
+global using InvoiceMate.Api.Controllers;
+global using InvoiceMate.Domain.Entities;
+global using Microsoft.AspNetCore.Mvc;
+global using Xunit;
+global using Moq;

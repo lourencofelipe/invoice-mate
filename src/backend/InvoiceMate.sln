@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11206.111 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceMate.Api", "InvoiceMate.Api\InvoiceMate.Api.csproj", "{94BFFFD0-03ED-5B3F-72EE-C54704240338}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceMate.Application", "InvoiceMate.Application\InvoiceMate.Application.csproj", "{7F30CD47-9D8A-4E6D-8BA1-B26182E67930}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceMate.Infrastructure", "InvoiceMate.Infrastructure\InvoiceMate.Infrastructure.csproj", "{F778666D-402E-4212-8CC4-10BAF65DDC96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceMate.Tests", "InvoiceMate.Tests\InvoiceMate.Tests.csproj", "{3AC7B2D7-A42E-4641-BB25-970FEB97E03E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F778666D-402E-4212-8CC4-10BAF65DDC96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F778666D-402E-4212-8CC4-10BAF65DDC96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F778666D-402E-4212-8CC4-10BAF65DDC96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AC7B2D7-A42E-4641-BB25-970FEB97E03E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AC7B2D7-A42E-4641-BB25-970FEB97E03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AC7B2D7-A42E-4641-BB25-970FEB97E03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AC7B2D7-A42E-4641-BB25-970FEB97E03E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
