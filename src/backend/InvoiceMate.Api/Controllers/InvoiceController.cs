@@ -2,20 +2,12 @@
 
 [ApiController]
 [Route("api/[controller]")]
-public class InvoiceController : ControllerBase
+public class InvoiceController(CreateInvoiceUseCase createInvoiceUseCase) : ControllerBase
 {
-    private readonly CreateInvoiceUseCase _createInvoiceUseCase;
-
-    public InvoiceController(CreateInvoiceUseCase createInvoiceUseCase)
-    {
-        _createInvoiceUseCase = createInvoiceUseCase;
-    }
-
-
     [HttpPost("generate-pdf")]
     public async Task<IActionResult> GenerateInvoicePdf([FromBody] CreateInvoiceRequest request, CancellationToken ct)
     {
-        var response = await _createInvoiceUseCase.ExecuteAsync(request, ct);
+        var response = await createInvoiceUseCase.ExecuteAsync(request, ct);
 
         return File(response.PdfBytes, "application/pdf", $"Invoice_{response.InvoiceNumber}.pdf");
     }

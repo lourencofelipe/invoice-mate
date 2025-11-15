@@ -19,7 +19,7 @@ public class InvoiceControllerTests
             .Setup(m => m.Map<Address>(It.IsAny<object>()))
             .Returns((object src) =>
             {
-                if (src == null) return null;
+                if (src is null) return null;
                 var ar = (AddressRequest)src;
                 return new Address(ar.Line1, ar.Line2, ar.City, ar.Region, ar.Postcode, ar.Country);
             });
