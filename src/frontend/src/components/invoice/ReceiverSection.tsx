@@ -21,24 +21,44 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
       </h2>
 
       <div className="space-y-5">
-        {/* Company Name */}
-        <div>
-          <Label htmlFor="receiverCompany" className="label-base">
-            Company name
-          </Label>
-          <Input
-            id="receiverCompany"
-            className="input-base"
-            type="text"
-            placeholder="Receiver company"
-            {...register("receiverCompany")}
-          />
-          {errors.receiverCompany && (
-            <p className="mt-2 text-sm text-red-600">
-              {errors.receiverCompany.message}
-            </p>
-          )}
+        {/* Company Name + Project Name */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="receiverCompany" className="label-base">
+              Company name
+            </Label>
+            <Input
+              id="receiverCompany"
+              className="input-base"
+              type="text"
+              placeholder="Receiver company"
+              {...register("receiverCompany")}
+            />
+            {errors.receiverCompany && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.receiverCompany.message}
+              </p>
+            )}
+          </div>
+          <div>
+          <Label htmlFor="projectName" className="label-base">
+              Project Name
+            </Label>
+            <Input
+              id="projectName"
+              className="input-base"
+              type="text"
+              placeholder="Your project name / Title"
+              {...register("projectName")}
+            />
+            {errors.projectName && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.projectName.message}
+              </p>
+            )}
+          </div>
         </div>
+  
 
         {/* Email */}
         <div>
@@ -88,7 +108,7 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
         </div>
 
         {/* Address Line 1 + Address Line 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <Label htmlFor="receiverAddress" className="label-base">
               Address Line 1
@@ -111,6 +131,18 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
               type="text"
               placeholder="Apartment, Unit"
               {...register("receiverComplement")}
+            />
+          </div>
+          <div>
+            <Label htmlFor="senderWebSite" className="label-base">
+              WebSite
+            </Label>
+            <Input
+              id="senderWebSite"
+              className="input-base"
+              type="text"
+              placeholder="Your website"
+              {...register("senderWebSite")}
             />
           </div>
         </div>
