@@ -77,8 +77,13 @@
             .info-card p {
                 font-size: 13px;
                 color: #6c7a93;
-                line-height: 1.6;
+                line-height: 1.7;
                 margin: 0;
+            }
+
+            .info-card p span {
+                display: block;
+                margin-bottom: 2px;
             }
 
             .info-card strong {
@@ -225,6 +230,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 40px;
+            margin-top: auto;
         }
 
         .footer-left {
@@ -286,6 +292,8 @@
 
             .invoice-container {
                 max-width: 100%;
+                display: flex;
+                flex-direction: column;
             }
         }
     </style>
@@ -303,16 +311,16 @@
             <div class="info-card">
                 <h3>Bill To</h3>
                 <p>
-                    <strong>@Model.RecipientName</strong><br />
-                    @Model.RecipientEmail<br />
+                    <span><strong>@Model.RecipientName</strong></span>
+                    <span>@Model.RecipientEmail<span/>
                     @if (!string.IsNullOrEmpty(Model.RecipientPhoneNumber))
                     {
-                        <text>@Model.RecipientPhoneNumber<br /></text>
+                        <span><text>@Model.RecipientPhoneNumber</text></span>
                     }
                     @if (Model.RecipientAddress != null)
                     {
                         <text>
-                            @Model.RecipientAddress.Line1<br />
+                            <span>@Model.RecipientAddress.Line1</span>
                             @if (!string.IsNullOrEmpty(Model.RecipientAddress.City))
                             {
                                 <text>@Model.RecipientAddress.City</text>
@@ -373,7 +381,7 @@
             <div class="info-card">
                 <h3>Invoice details</h3>
                 <p>
-                    <strong>Invoice number:</strong> @Model.InvoiceNumber<br />
+                    <strong>Invoice number:</strong> <h3>@Model.InvoiceNumber</h3><br />
                     <strong>Issue date:</strong> @Model.InvoiceDate.ToString("dd-MM-yyyy")<br />
                     <strong>Due date:</strong> @(Model.DueDate == DateTime.MinValue ? "-" : Model.DueDate.ToString("dd-MM-yyyy"))<br />
                     @if (!string.IsNullOrEmpty(Model.ProjectName))
@@ -384,26 +392,7 @@
             </div>
         </div>
 
-        <!-- Project Details Section -->
-        <div class="project-details">
-            <h2>Project details</h2>
-            <p>
-                @if (!string.IsNullOrWhiteSpace(Model.Notes))
-                {
-                    @(System.Net.WebUtility.HtmlEncode(Model.Notes).Replace("\n", "<br/>"))
-                }
-                else
-                {
-                    <text>
-                        Activities example:<br />
-                        • Updating interior drawings for pricing.<br />
-                        • Updating construction drawings set for printing.<br />
-                        • Liaising with Zeal Print for A1 copies and picking them.<br />
-                        • And continuing discussions with yourselves.
-                    </text>
-                }
-            </p>
-        </div>
+     
 
         <!-- Deliverables Table -->
         <div class="table-container">
@@ -448,6 +437,15 @@
             </div>
         </div>
 
+        <!-- Project Notes Section -->
+         @if (!string.IsNullOrWhiteSpace(Model.Notes))
+         {
+          <div class="project-details">
+            <h2>Notes</h2>
+            <p>@(System.Net.WebUtility.HtmlEncode(Model.Notes).Replace("\n", "<br/>"))</p>
+           </div>
+         }
+ 
         <!-- Footer -->
         <div class="footer">
             <div class="footer-left">
