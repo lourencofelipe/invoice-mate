@@ -137,6 +137,12 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
             placeholder="Country"
             {...register("billToCountry")}
           />
+
+          {errors.billToCountry && (
+            <p className="mt-2 text-sm text-red-600">
+              {errors.billToCountry.message}
+            </p>
+          )}
         </div>
       </div>
     </div>

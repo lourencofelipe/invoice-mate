@@ -184,6 +184,12 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
               placeholder="Country"
               {...register("receiverCountry")}
             />
+          
+            {errors.receiverCountry && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.receiverCountry.message}
+              </p>
+            )}
           </div>
         </div>
       </div>

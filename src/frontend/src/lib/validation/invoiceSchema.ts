@@ -43,7 +43,7 @@ export const invoiceSchema = z
     receiverCity: z.string().optional(),
     receiverAddress: z.string().optional(),
     receiverComplement: z.string().optional(),
-    receiverCountry: z.string().optional(),
+    receiverCountry: z.string().min(1, "Country name is required"),
 
     // Recipient (bill to)
     billToCompany: z.string().min(1, "Company name is required"),
@@ -54,15 +54,19 @@ export const invoiceSchema = z
     billToCity: z.string().optional(),
     billToRegion: z.string().optional(),
     billToPostcode: z.string().optional(),
-    billToCountry: z.string().optional(),
+    billToCountry:  z.string().min(1, "Country name is required"),
 
     // Invoice details
     invoiceNumber: z.string().min(1, "Invoice number is required"),
     invoiceDate: z.string().min(1, "Date is required"),
-    dueDate: z.string().min(1, "Due Date is required"),
+    dueDate: z.string().min(1, "Due date is required"),
     type: z.enum(["time-based", "product-based"]),
     projectName: z.string().optional(),
-    currency: z.string().min(1, "Currency is required"),
+    currency: z
+    .string()
+    .refine((val) => val.trim() !== "", {
+    message: "Currency is required",
+    }),
     applyGst: z.boolean().default(false),
     gstRate: z.string().optional(),
     notes: z.string().optional(),

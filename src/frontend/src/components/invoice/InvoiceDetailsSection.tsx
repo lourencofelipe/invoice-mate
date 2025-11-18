@@ -135,27 +135,38 @@ export function InvoiceDetailsSection({
           <Controller
             name="invoiceDate"
             control={control}
+            rules={{ required: true }}
             defaultValue={new Date().toISOString()}
             render={({ field }) => {
               const value = field.value ? new Date(field.value) : new Date();
               return (
+                <>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="justify-start text-left font-normal input-base">
+                    <Button variant="outline" className={`justify-start text-left font-normal input-base ${
+                      errors.invoiceDate ? "border-red-500" : ""}`}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
                     </Button>
                   </PopoverTrigger>
+
                   <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
                     <Calendar
                       className="w-auto !bg-white rounded-md"
                       mode="single"
-                      selected={value}
-                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                      selected={value ?? undefined}
+                      onSelect={(date) => field.onChange(date?.toISOString() || "")}
                       initialFocus
                     />
                   </PopoverContent>
                 </Popover>
+
+                {errors.invoiceDate && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.invoiceDate.message as string}
+                  </p>
+                )}
+                </>
               );
             }}
           />
@@ -167,27 +178,39 @@ export function InvoiceDetailsSection({
           <Controller
             name="dueDate"
             control={control}
+            rules={{ required: true }}
             defaultValue=""
             render={({ field }) => {
               const value = field.value ? new Date(field.value) : null;
               return (
+                <>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="justify-start text-left font-normal input-base">
+                    <Button variant="outline" className={`justify-start text-left font-normal input-base ${
+                        errors.dueDate ? "border-red-500" : ""}`}>
+
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
                     </Button>
                   </PopoverTrigger>
+
                   <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
                     <Calendar
                       className="w-auto !bg-white rounded-md"
                       mode="single"
-                      selected={value || undefined}
-                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                      selected={value ?? undefined}
+                      onSelect={(date) => field.onChange(date?.toISOString() || "")}
                       initialFocus
                     />
                   </PopoverContent>
                 </Popover>
+
+                {errors.dueDate && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.dueDate.message as string}
+                  </p>
+                )}
+                </>
               );
             }}
           />
@@ -201,11 +224,16 @@ export function InvoiceDetailsSection({
           <Controller
             name="currency"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
-              <Select value={field.value || ""} onValueChange={field.onChange}>
-                <SelectTrigger id="currency" className="input-base">
+              <Select defaultValue="" value={field.value} onValueChange={(val) => field.onChange(val)}>
+                
+                <SelectTrigger
+                  id="currency"
+                  className={`input-base ${errors.currency ? "border-red-500" : ""}`}>
                   <SelectValue placeholder={t("select.currency")} />
                 </SelectTrigger>
+
                 <SelectContent>
                   {currencies.map((currency) => (
                     <SelectItem key={currency.value} value={currency.value}>
@@ -216,6 +244,12 @@ export function InvoiceDetailsSection({
               </Select>
             )}
           />
+
+          {errors.currency && (
+            <p className="mt-2 text-sm text-red-600">
+              {errors.currency.message as string}
+            </p>
+          )}
         </div>
       </div>
 

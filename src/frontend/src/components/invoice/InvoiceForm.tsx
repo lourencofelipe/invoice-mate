@@ -143,7 +143,13 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
+    <form onSubmit={handleSubmit(onSubmit, () => {
+      const firstError = Object.keys(errors)[0];
+      if (firstError) {
+        const el = document.getElementById(firstError);
+      if (el) el.focus();
+      }
+    })} className="space-y-0">
       {submitSuccess && (
         <Alert className="bg-green-50 border-green-200">
           <AlertDescription className="text-green-800">
