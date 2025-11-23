@@ -1,5 +1,4 @@
 ﻿global using InvoiceMate.Application.Interfaces.Services;
-global using Microsoft.Extensions.DependencyInjection;
 global using InvoiceMate.Application.Records.Requests;
 global using InvoiceMate.Application.Common.Mapping;
 global using InvoiceMate.Application.Validators;
@@ -8,8 +7,6 @@ global using System.Text.Json.Serialization;
 global using InvoiceMate.Infrastructure.Pdf;
 global using InvoiceMate.Api.Infra.Errors;
 global using InvoiceMate.Api.Extensions;
-global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using FluentValidation;
 global using System.Text.Json;
-global using AutoMapper;
