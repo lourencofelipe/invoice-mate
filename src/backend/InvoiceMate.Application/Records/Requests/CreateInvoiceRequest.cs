@@ -1,23 +1,23 @@
 ﻿namespace InvoiceMate.Application.Records.Requests;
 public sealed record CreateInvoiceRequest(
-    string InvoiceNumber,          // user-provided
-    string Type,                   // "time-based" | "product-based"
+    string InvoiceNumber,          
+    string Type,                   
     string? ProjectName,
     string SenderName,
     string SenderEmail,
     string SenderWebSite,
-    string? SenderPhoneNumber, // optional
+    string? SenderPhoneNumber, 
     AddressRequest? SenderAddress,
-    string? SenderAccNumber,     // optional, e.g., bank account number
+    string? SenderAccNumber,     
     string RecipientName,
     string RecipientEmail,
-    string? RecipientPhoneNumber, // optional
+    string? RecipientPhoneNumber, 
     AddressRequest? RecipientAddress,
-    string Currency,               // ISO-4217 (e.g., "NZD")
+    string Currency,               
     DateTime InvoiceDate,
     DateTime DueDate,
     bool ApplyGst,
-    decimal? GstRate,              // e.g., 0.15
+    decimal? GstRate,              
     string? Notes,
     List<InvoiceItemRequest> Items
 );
