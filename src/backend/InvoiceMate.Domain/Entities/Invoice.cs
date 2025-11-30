@@ -6,7 +6,7 @@ public class Invoice
 {
     public Guid Id { get; private set; }
     public string InvoiceNumber { get; private set; }
-    public string Type { get; private set; } // "time-based" | "product-based"
+    public string Type { get; private set; }
     public string ProjectName { get; set; }
 
     public string SenderName { get; private set; }
@@ -100,11 +100,25 @@ public class Invoice
         decimal gstRate)
     {
         var invoice = new Invoice(
-            Guid.NewGuid(), invoiceNumber, type, projectName,
-            senderName, senderEmail,senderWebSite, senderPhoneNumber, senderAddress, senderAccNumber,
-            recipientName, recipientEmail, recipientPhoneNumber, recipientAddress,
-            currency, invoiceDate, dueDate,
-            items, notes);
+            Guid.NewGuid(), 
+            invoiceNumber, 
+            type, 
+            projectName,
+            senderName,
+            senderEmail,
+            senderWebSite, 
+            senderPhoneNumber, 
+            senderAddress, 
+            senderAccNumber,
+            recipientName,
+            recipientEmail, 
+            recipientPhoneNumber, 
+            recipientAddress,
+            currency, 
+            invoiceDate, 
+            dueDate,
+            items, 
+            notes);
 
         invoice.CalculateTotals(applyGst, gstRate);
         return invoice;
