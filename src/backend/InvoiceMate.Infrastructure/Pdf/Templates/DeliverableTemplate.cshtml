@@ -382,7 +382,7 @@
             <div class="info-card">
                 <h3>Invoice details</h3>
                 <p>
-                    <strong>Invoice number:</strong> <h3>@Model.InvoiceNumber</h3><br />
+                    <strong>Invoice number:</strong> @Model.InvoiceNumber<br />
                     <strong>Issue date:</strong> @Model.InvoiceDate.ToString("dd-MM-yyyy")<br />
                     <strong>Due date:</strong> @(Model.DueDate == DateTime.MinValue ? "-" : Model.DueDate.ToString("dd-MM-yyyy"))<br />
                     @if (!string.IsNullOrEmpty(Model.ProjectName))
