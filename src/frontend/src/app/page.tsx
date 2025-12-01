@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { InvoiceForm } from "@/components/invoice/InvoiceForm";
-import { LanguageProvider } from "@/components/invoice/LanguageProvider";
+import { InvoiceForm } from "@/features/invoices/ui/InvoiceForm";
+import { LanguageProvider } from "@/shared/providers/LanguageProvider";
 
 function InvoiceHeader({ invoiceType }: { invoiceType: string }) {
- 
+
   const typeLabel = invoiceType === "product-based" ? "Deliverables" : "Service provision";
 
   return (
@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-gradient-to-b from-indigo-500 via-indigo-300 to-white py-8 px-4 sm:px-6 lg:px-8 2xl:px-20">
+      <div className="min-h-screen bg-[#F7F7F9] py-8 px-4 sm:px-6 lg:px-8 2xl:px-20">
         <div className="max-w-3xl mx-auto">
           <div className="bg-gradient-to-br from-white to-gray-50 shadow-lg rounded-2xl p-8 sm:p-8 md:p-10 lg:p-14">
             <InvoiceHeader invoiceType={invoiceType} />

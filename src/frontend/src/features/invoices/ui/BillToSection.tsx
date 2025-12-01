@@ -1,10 +1,10 @@
 "use client";
 
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { useLanguage } from "./LanguageProvider";
-import { InvoiceFormData } from "@/lib/validation/invoiceSchema";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/shared/providers/LanguageProvider";
+import { InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
 
 interface BillToSectionProps {
   register: UseFormRegister<InvoiceFormData>;
@@ -19,7 +19,7 @@ export function BillToSection({ register, errors }: BillToSectionProps) {
       <h2 className="text-lg font-bold text-[#333333] pb-4 mb-8 border-b border-[#DDDDDD]">
         {t("billto.title")}
       </h2>
-      
+
       <div>
         <Label htmlFor="billToCompany" className="mb-2 block">
           {t("billto.company")}

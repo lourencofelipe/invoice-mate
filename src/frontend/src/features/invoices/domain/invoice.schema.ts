@@ -40,8 +40,8 @@ export const invoiceSchema = z
     receiverPhone: z.string().optional(),
     receiverAccNumber: z.string().optional(),
     receiverZip: z.string().optional(),
-    receiverCity: z.string().optional(),
-    receiverAddress: z.string().optional(),
+    receiverCity: z.string().min(1, "City is required"),
+    receiverAddress: z.string().min(1, "Address is required"),
     receiverComplement: z.string().optional(),
     receiverCountry: z.string().min(1, "Country name is required"),
 
@@ -49,12 +49,12 @@ export const invoiceSchema = z
     billToCompany: z.string().min(1, "Company name is required"),
     billToEmail: z.string().email("Invalid email address"),
     billToPhone: z.string().optional(),
-    billToAddress: z.string().optional(),
+    billToAddress: z.string().min(1, "Address is required"),
     billToAddressLine2: z.string().optional(),
-    billToCity: z.string().optional(),
+    billToCity: z.string().min(1, "City is required"),
     billToRegion: z.string().optional(),
     billToPostcode: z.string().optional(),
-    billToCountry:  z.string().min(1, "Country name is required"),
+    billToCountry: z.string().min(1, "Country name is required"),
 
     // Invoice details
     invoiceNumber: z.string().min(1, "Invoice number is required"),
@@ -63,10 +63,10 @@ export const invoiceSchema = z
     type: z.enum(["time-based", "product-based"]),
     projectName: z.string().optional(),
     currency: z
-    .string()
-    .refine((val) => val.trim() !== "", {
-    message: "Currency is required",
-    }),
+      .string()
+      .refine((val) => val.trim() !== "", {
+        message: "Currency is required",
+      }),
     applyGst: z.boolean().default(false),
     gstRate: z.string().optional(),
     notes: z.string().optional(),
@@ -127,7 +127,7 @@ export const invoiceSchema = z
         });
       }
 
-      
+
       if (data.hasMultipleProfessionals) {
         data.professionals.forEach((pro, index) => {
           if (!pro.name || pro.hours === undefined || pro.hourlyRate === undefined) {

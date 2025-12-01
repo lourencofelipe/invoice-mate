@@ -1,10 +1,10 @@
 "use client";
 
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { useLanguage } from "./LanguageProvider";
-import { InvoiceFormData } from "@/lib/validation/invoiceSchema";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/shared/providers/LanguageProvider";
+import { InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
 
 interface ReceiverSectionProps {
   register: UseFormRegister<InvoiceFormData>;
@@ -41,7 +41,7 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
             )}
           </div>
           <div>
-          <Label htmlFor="projectName" className="label-base">
+            <Label htmlFor="projectName" className="label-base">
               Project Name
             </Label>
             <Input
@@ -58,7 +58,7 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
             )}
           </div>
         </div>
-  
+
 
         {/* Email */}
         <div>
@@ -184,7 +184,7 @@ export function ReceiverSection({ register, errors }: ReceiverSectionProps) {
               placeholder="Country"
               {...register("receiverCountry")}
             />
-          
+
             {errors.receiverCountry && (
               <p className="mt-2 text-sm text-red-600">
                 {errors.receiverCountry.message}

@@ -5,27 +5,28 @@ import {
   UseFormRegister,
   FieldErrors,
   UseFormWatch,
+  UseFormSetValue,
   Controller,
   Control,
   useFieldArray,
 } from "react-hook-form";
-import { useLanguage } from "./LanguageProvider";
-import { InvoiceFormData } from "@/lib/validation/invoiceSchema";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { currencies } from "@/utils/currencies";
-import { Calendar } from "@/components/ui/calendar";
+import { useLanguage } from "@/shared/providers/LanguageProvider";
+import { InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { currencies } from "@/shared/utils/currencies";
+import { Calendar } from "@/shared/ui/calendar";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Button } from "@/shared/ui/button";
 import { CalendarIcon, PlusCircle, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -34,7 +35,7 @@ interface InvoiceDetailsSectionProps {
   errors: FieldErrors<InvoiceFormData>;
   watch: UseFormWatch<InvoiceFormData>;
   control: Control<InvoiceFormData>;
-  setValue: (field: string, value: any) => void;
+  setValue: UseFormSetValue<InvoiceFormData>;
   invoiceType: string;
   setInvoiceType: (type: string) => void;
 }
@@ -141,31 +142,30 @@ export function InvoiceDetailsSection({
               const value = field.value ? new Date(field.value) : new Date();
               return (
                 <>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className={`justify-start text-left font-normal input-base ${
-                      errors.invoiceDate ? "border-red-500" : ""}`}>
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
-                    </Button>
-                  </PopoverTrigger>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className={`justify-start text-left font-normal input-base ${errors.invoiceDate ? "border-red-500" : ""}`}>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
+                      </Button>
+                    </PopoverTrigger>
 
-                  <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
-                    <Calendar
-                      className="w-auto !bg-white rounded-md"
-                      mode="single"
-                      selected={value ?? undefined}
-                      onSelect={(date) => field.onChange(date?.toISOString() || "")}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                    <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
+                      <Calendar
+                        className="w-auto !bg-white rounded-md"
+                        mode="single"
+                        selected={value ?? undefined}
+                        onSelect={(date) => field.onChange(date?.toISOString() || "")}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
 
-                {errors.invoiceDate && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.invoiceDate.message as string}
-                  </p>
-                )}
+                  {errors.invoiceDate && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errors.invoiceDate.message as string}
+                    </p>
+                  )}
                 </>
               );
             }}
@@ -184,32 +184,31 @@ export function InvoiceDetailsSection({
               const value = field.value ? new Date(field.value) : null;
               return (
                 <>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className={`justify-start text-left font-normal input-base ${
-                        errors.dueDate ? "border-red-500" : ""}`}>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className={`justify-start text-left font-normal input-base ${errors.dueDate ? "border-red-500" : ""}`}>
 
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
-                    </Button>
-                  </PopoverTrigger>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {value ? format(value, "dd/MM/yyyy") : <span>Select date</span>}
+                      </Button>
+                    </PopoverTrigger>
 
-                  <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
-                    <Calendar
-                      className="w-auto !bg-white rounded-md"
-                      mode="single"
-                      selected={value ?? undefined}
-                      onSelect={(date) => field.onChange(date?.toISOString() || "")}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                    <PopoverContent className="z-50 !bg-white rounded-xl shadow-md p-2">
+                      <Calendar
+                        className="w-auto !bg-white rounded-md"
+                        mode="single"
+                        selected={value ?? undefined}
+                        onSelect={(date) => field.onChange(date?.toISOString() || "")}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
 
-                {errors.dueDate && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.dueDate.message as string}
-                  </p>
-                )}
+                  {errors.dueDate && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errors.dueDate.message as string}
+                    </p>
+                  )}
                 </>
               );
             }}
@@ -227,7 +226,7 @@ export function InvoiceDetailsSection({
             rules={{ required: true }}
             render={({ field }) => (
               <Select defaultValue="" value={field.value} onValueChange={(val) => field.onChange(val)}>
-                
+
                 <SelectTrigger
                   id="currency"
                   className={`input-base ${errors.currency ? "border-red-500" : ""}`}>

@@ -6,7 +6,7 @@ export interface CreateInvoiceRequest {
   ProjectName: string;
   SenderName: string;
   SenderEmail: string;
-  senderWebSite: string;
+  SenderWebSite: string;
   SenderPhoneNumber: string | null;
   SenderAddress: {
     Line1: string | null;

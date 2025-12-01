@@ -4,13 +4,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
-import { createInvoice } from "@/api/invoices/invoiceApi";
+import { createInvoice } from "@/features/invoices/infrastructure/invoice.api";
 import { ReceiverSection } from "./ReceiverSection";
 import { BillToSection } from "./BillToSection";
 import { InvoiceDetailsSection } from "./InvoiceDetailsSection";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { invoiceSchema, InvoiceFormData } from "@/lib/validation/invoiceSchema";
+import { Button } from "@/shared/ui/button";
+import { Alert, AlertDescription } from "@/shared/ui/alert";
+import { invoiceSchema, InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
 
 interface InvoiceFormProps {
   invoiceType: string;
@@ -30,12 +30,12 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
     control,
     setValue,
   } = useForm<InvoiceFormData>({
-    resolver: zodResolver(invoiceSchema),
+    resolver: zodResolver(invoiceSchema) as any,
     defaultValues: {
       invoiceDate: new Date().toISOString().split("T")[0],
       currency: "",
       applyGst: false,
-      type: invoiceType,
+      type: invoiceType as any,
       items: [],
       professionals: [],
       hasMultipleProfessionals: false,
@@ -74,6 +74,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
               HourlyRate: Number(data.hourRate ?? 0),
               Quantity: 1,
               UnitPrice: Number(data.hours ?? 0) * Number(data.hourRate ?? 0),
+              ProfessionalName: "",
             },
           ];
         }
@@ -82,16 +83,19 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
           Description: item.description,
           Quantity: Number(item.quantity),
           UnitPrice: Number(item.unitPrice),
+          Hours: null,
+          HourlyRate: null,
+          ProfessionalName: "",
         }));
       }
 
       const apiData = {
         InvoiceNumber: data.invoiceNumber,
         Type: data.type,
-        ProjectName: data.projectName,
+        ProjectName: data.projectName || "",
         SenderName: data.receiverCompany,
         SenderEmail: data.receiverEmail,
-        SenderWebSite: data.senderWebSite,
+        SenderWebSite: data.senderWebSite || "",
         SenderPhoneNumber: data.receiverPhone || null,
         SenderAddress: {
           Line1: data.receiverAddress || null,
@@ -115,7 +119,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
         },
         Currency: data.currency,
         InvoiceDate: data.invoiceDate,
-        DueDate: data.dueDate || null,
+        DueDate: data.dueDate || "",
         ApplyGst: data.applyGst || false,
         GstRate: data.applyGst ? parseFloat(data.gstRate ?? "0.15") : 0,
         Notes: data.notes || null,
@@ -147,7 +151,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
       const firstError = Object.keys(errors)[0];
       if (firstError) {
         const el = document.getElementById(firstError);
-      if (el) el.focus();
+        if (el) el.focus();
       }
     })} className="space-y-0">
       {submitSuccess && (
