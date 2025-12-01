@@ -8,14 +8,14 @@ Lightweight invoice generator, with focus on simplicity and ease of use.
 - Dynamic invoice templates using RazorLight  
 - PDF generation using Playwright  
 
-## Service Provision invoices
+### Service Provision invoices
 
 - Add professionals
 - Track hours
 - Set hourly rates
 - Auto-calculate totals
 
-## Deliverable invoices
+### Deliverable invoices
 
 - Add deliverables
 - Set prices
