@@ -12,7 +12,6 @@ public class InvoiceController(CreateInvoiceUseCase createInvoiceUseCase) : Cont
         return File(response.PdfBytes, "application/pdf", $"Invoice_{response.InvoiceNumber}.pdf");
     }
 
-    /// <summary>Placeholder para preview do PDF.</summary>
     [HttpGet("{id:guid}/preview")]
     public IActionResult GetPreview(Guid id) => NotFound();
 }
