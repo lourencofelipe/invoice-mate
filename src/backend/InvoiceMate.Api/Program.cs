@@ -19,8 +19,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFront",
         policy => policy
             .WithOrigins(clientOrigin)
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 builder.Services.AddControllers()
@@ -47,7 +47,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ProblemDetailsMiddleware>();
-app.UseExceptionHandler("/error"); // add an /error endpoint or your middleware
+app.UseExceptionHandler("/error");
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
