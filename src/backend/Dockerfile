@@ -13,8 +13,7 @@ COPY . .
 WORKDIR "/src/InvoiceMate.Api"
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime stage
-FROM mcr.microsoft.com/playwright/dotnet:v1.54.0-noble AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_HTTP_PORTS=8080
