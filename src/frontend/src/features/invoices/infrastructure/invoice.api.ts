@@ -44,7 +44,7 @@ export interface CreateInvoiceRequest {
 }
 
 const apiClient = axios.create({
-  baseURL: "https://localhost:5001",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001",
   responseType: "arraybuffer",
   headers: { "Content-Type": "application/json" },
 });

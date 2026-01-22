@@ -8,12 +8,17 @@ builder.Services.AddValidators();
 
 builder.Services.AddSwaggerGen();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5001";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+var clientOrigin = builder.Configuration["ClientOrigin"];
+
 // Add CORS for frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
+    options.AddPolicy("AllowFront",
         policy => policy
-            .WithOrigins("http://localhost:3000")
+            .WithOrigins(clientOrigin)
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
@@ -51,7 +56,7 @@ app.UseSwaggerUI(options =>
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowFront");
 
 app.UseAuthorization();
 
