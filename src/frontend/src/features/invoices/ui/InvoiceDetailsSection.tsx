@@ -12,6 +12,7 @@ import {
 } from "react-hook-form";
 import { useLanguage } from "@/shared/providers/LanguageProvider";
 import { InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
+
 import { Label } from "@/shared/ui/label";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
@@ -30,14 +31,16 @@ import { Button } from "@/shared/ui/button";
 import { CalendarIcon, PlusCircle, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
+type InvoiceType = InvoiceFormData["type"];
+
 interface InvoiceDetailsSectionProps {
   register: UseFormRegister<InvoiceFormData>;
   errors: FieldErrors<InvoiceFormData>;
   watch: UseFormWatch<InvoiceFormData>;
   control: Control<InvoiceFormData>;
   setValue: UseFormSetValue<InvoiceFormData>;
-  invoiceType: string;
-  setInvoiceType: (type: string) => void;
+  invoiceType: InvoiceType;
+  setInvoiceType: (type: InvoiceType) => void;
 }
 
 export function InvoiceDetailsSection({

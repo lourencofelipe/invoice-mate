@@ -12,9 +12,11 @@ import { Button } from "@/shared/ui/button";
 import { Alert, AlertDescription } from "@/shared/ui/alert";
 import { invoiceSchema, InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
 
+type InvoiceType = InvoiceFormData["type"];
+
 interface InvoiceFormProps {
-  invoiceType: string;
-  setInvoiceType: (type: string) => void;
+  invoiceType: InvoiceType;
+  setInvoiceType: (type: InvoiceType) => void;
 }
 
 export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
@@ -30,12 +32,12 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
     control,
     setValue,
   } = useForm<InvoiceFormData>({
-    resolver: zodResolver(invoiceSchema) as any,
+    resolver: zodResolver(invoiceSchema),
     defaultValues: {
       invoiceDate: new Date().toISOString().split("T")[0],
       currency: "",
       applyGst: false,
-      type: invoiceType as any,
+      type: invoiceType,
       items: [],
       professionals: [],
       hasMultipleProfessionals: false,
@@ -147,13 +149,16 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit, () => {
-      const firstError = Object.keys(errors)[0];
-      if (firstError) {
-        const el = document.getElementById(firstError);
-        if (el) el.focus();
-      }
-    })} className="space-y-0">
+    <form
+      onSubmit={handleSubmit(onSubmit, () => {
+        const firstError = Object.keys(errors)[0];
+        if (firstError) {
+          const el = document.getElementById(firstError);
+          if (el) el.focus();
+        }
+      })}
+      className="space-y-0"
+    >
       {submitSuccess && (
         <Alert className="bg-green-50 border-green-200">
           <AlertDescription className="text-green-800">
@@ -164,7 +169,9 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
 
       {submitError && (
         <Alert className="bg-red-50 border-red-200">
-          <AlertDescription className="text-red-800">{submitError}</AlertDescription>
+          <AlertDescription className="text-red-800">
+            {submitError}
+          </AlertDescription>
         </Alert>
       )}
 
