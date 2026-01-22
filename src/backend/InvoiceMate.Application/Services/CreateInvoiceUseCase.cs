@@ -52,7 +52,7 @@ public class CreateInvoiceUseCase
             Tax: invoice.Tax,
             Total: invoice.Total,
             Status: "Generated",
-            PdfPreviewUrl: null, // To be added in future when you implement storage/CDN
+            PdfPreviewUrl: null, // To be added in future.
             PdfBytes: pdfBytes
         );
     }
