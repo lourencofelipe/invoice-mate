@@ -54,8 +54,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "InvoiceMate API");
 });
 
-app.UseHttpsRedirection();
-
 app.UseCors("AllowFront");
 
 app.UseAuthorization();
