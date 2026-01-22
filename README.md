@@ -30,7 +30,7 @@ Lightweight invoice generator, with focus on simplicity and ease of use.
 - **PDF Renderer:** Playwright   
 - **Testing:** XUnit, FluentAssertions  
 
-- **Frontend:** Next.js 14 / App Router
+- **Frontend:** Next.js 16 / App Router
 - **UI Library:** Shadcn UI
 - **State & Forms:** React Hook Form, Zod
 - **Styling:** Tailwind CSS
