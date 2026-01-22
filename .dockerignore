@@ -1,0 +1,10 @@
+# Ignore builds
+bin/
+obj/
+.vs/
+.vscode/
+TestResults/
+
+# Ignore tests
+src/backend/InvoiceMate.Tests/
+InvoiceMate.Tests/
