@@ -23,7 +23,8 @@ function InvoiceHeader({ invoiceType }: { invoiceType: string }) {
 }
 
 export default function Home() {
-  const [invoiceType, setInvoiceType] = useState("time-based");
+  type InvoiceType = "time-based" | "product-based"
+  const [invoiceType, setInvoiceType] = useState<InvoiceType>("time-based");
 
   return (
     <LanguageProvider>

@@ -100,7 +100,7 @@ export function InvoiceDetailsSection({
               value={field.value}
               onValueChange={(val) => {
                 field.onChange(val);
-                setInvoiceType(val);
+                setInvoiceType(val as InvoiceType);
               }}
             >
               <SelectTrigger id="type" className="input-base">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
@@ -18,7 +18,6 @@ interface InvoiceFormProps {
   invoiceType: InvoiceType;
   setInvoiceType: (type: InvoiceType) => void;
 }
-
 export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -32,7 +31,7 @@ export function InvoiceForm({ invoiceType, setInvoiceType }: InvoiceFormProps) {
     control,
     setValue,
   } = useForm<InvoiceFormData>({
-    resolver: zodResolver(invoiceSchema),
+    resolver: zodResolver(invoiceSchema) as Resolver<InvoiceFormData>,
     defaultValues: {
       invoiceDate: new Date().toISOString().split("T")[0],
       currency: "",
