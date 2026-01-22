@@ -12,7 +12,7 @@ import { Button } from "@/shared/ui/button";
 import { Alert, AlertDescription } from "@/shared/ui/alert";
 import { invoiceSchema, InvoiceFormData } from "@/features/invoices/domain/invoice.schema";
 
-type InvoiceType = InvoiceFormData["type"];
+type InvoiceType = "time-based" | "product-based"
 
 interface InvoiceFormProps {
   invoiceType: InvoiceType;
