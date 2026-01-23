@@ -41,6 +41,8 @@ builder.Services.AddControllers()
 
 var app = builder.Build();
 
+app.UseCors("AllowFront");
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -54,7 +56,6 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "InvoiceMate API");
 });
 
-app.UseCors("AllowFront");
 
 app.UseAuthorization();
 
