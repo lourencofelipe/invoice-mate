@@ -4,14 +4,29 @@
     {
         private readonly RazorLightEngine _razorEngine;
 
-        public InvoicePdfGenerator()
-        {
+       public InvoicePdfGenerator()
+       {
             var basePath = AppContext.BaseDirectory;
+
+            var templatesPath = Path.Combine(
+                basePath,
+                "Pdf",
+                "Templates"
+            );
+
+            if (!Directory.Exists(templatesPath))
+            {
+                throw new DirectoryNotFoundException(
+                    $"Templates not found at {templatesPath}"
+                );
+            }
+
             _razorEngine = new RazorLightEngineBuilder()
-                .UseFileSystemProject(Path.Combine(basePath, "Templates"))
-                .UseCachingProvider(new NullCachingProvider()) 
+                .UseFileSystemProject(templatesPath)
+                .UseCachingProvider(new NullCachingProvider())
                 .Build();
-        }
+}
+
 
         public async Task<byte[]> GenerateAsync(Invoice invoice, CancellationToken ct = default)
         {
