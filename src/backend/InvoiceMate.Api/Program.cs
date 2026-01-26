@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
@@ -28,7 +30,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     })
-    .ConfigureApiBehaviorOptions(options => 
+    .ConfigureApiBehaviorOptions(options =>
     {
         options.SuppressModelStateInvalidFilter = true;
     });
@@ -49,7 +51,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ProblemDetailsMiddleware>();
-app.UseExceptionHandler("/error");
+app.Map("/error", (HttpContext context) =>
+{
+    var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+    return Results.Problem(
+        title: "Unexpected error",
+        detail: exception?.Message,
+        statusCode: StatusCodes.Status500InternalServerError
+    );
+});
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
