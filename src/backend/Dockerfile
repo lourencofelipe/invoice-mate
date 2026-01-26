@@ -13,11 +13,16 @@ COPY . .
 WORKDIR "/src/InvoiceMate.Api"
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
+# CHROMIUM PLAYWRIGHT
+RUN pwsh /app/publish/playwright.ps1 install chromium
+
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_HTTP_PORTS=8080
 
 COPY --from=build /app/publish .
+
+COPY --from=build /root/.cache/ms-playwright /root/.cache/ms-playwright
 
 ENTRYPOINT ["dotnet", "InvoiceMate.Api.dll"]

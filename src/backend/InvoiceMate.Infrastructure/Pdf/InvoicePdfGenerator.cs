@@ -4,8 +4,8 @@
     {
         private readonly RazorLightEngine _razorEngine;
 
-       public InvoicePdfGenerator()
-       {
+        public InvoicePdfGenerator()
+        {
             var basePath = AppContext.BaseDirectory;
 
             var templatesPath = Path.Combine(
@@ -25,7 +25,7 @@
                 .UseFileSystemProject(templatesPath)
                 .UseCachingProvider(new NullCachingProvider())
                 .Build();
-}
+        }
 
 
         public async Task<byte[]> GenerateAsync(Invoice invoice, CancellationToken ct = default)
@@ -39,16 +39,21 @@
             using var playwright = await Playwright.CreateAsync();
             var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true
+                Headless = true,
+                Args = new[]
+                {
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage"
+                }
             });
 
             var page = await browser.NewPageAsync();
 
             await page.SetContentAsync(htmlContent);
-           
+
             var pdfBytes = await page.PdfAsync(new PagePdfOptions
             {
-                PrintBackground = true, 
+                PrintBackground = true,
                 Format = "A4",
             });
 
